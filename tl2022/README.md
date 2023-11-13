@@ -115,7 +115,7 @@ eptex -fmt=ep-sj hoge.tex
 ```
 が，その場合，コマンドラインに渡すファイル名は ASCII の範囲に留めるべきです（JIS X 0208 の範囲内であっても和文文字は使えません）．
 
-### 「和文文字 + グループ境界 {{{ {} }}}」で行が終了した場合などの改行の扱い
+### 「和文文字 + グループ境界 `{}`」で行が終了した場合などの改行の扱い
  * [tex-jp-build/87](https://github.com/texjporg/tex-jp-build/issues/87), [TeX Forum 中の記事](https://oku.edu.mie-u.ac.jp/tex/mod/forum/discuss.php?d=2682)
 
 #### pTeX の過去の挙動と p4.0.0 既定の挙動
@@ -243,7 +243,7 @@ b % 空行によって \par ではなく \MYPAR が挿入される
  * upTeX では，和文カテゴリーコードは和文文字トークンに保存される 
 という挙動になっています． 
 
-さて，和文文字トークンを {{{\let}}} したトークンについて，
+さて，和文文字トークンを `\let` したトークンについて，
 [https://osdn.net/projects/eptex/wiki/tl2020#h3-.E5.92.8C.E6.96.87.E6.96.87.E5.AD.97.E3.83.88.E3.83.BC.E3.82.AF.E3.83.B3.E3.82.92.20.7B.7B.7B.5Clet.7D.7D.7D.20.E3.81.97.E3.81.9F.E5.88.B6.E5.BE.A1.E7.B6.B4.E3.81.AE.E5.92.8C.E6.96.87.E3.82.AB.E3.83.86.E3.82.B4.E3.83.AA.E3.83.BC.E3.82.B3.E3.83.BC.E3.83.89.E3.81.AE.E6.89.B1.E3.81.84.E3.80.90R.E3.80.91 TeX Live 2019 リリース後のリビルド] において
  `\if`, `\ifcat` において，和文文字トークンを `\let` したトークンについては和文カテゴリーコードをその都度算出する
 という変更を行いましたが，`\ifx` においてはそうなっておらず，不統一な状態になっていました．
@@ -303,7 +303,7 @@ $[^^80][\AB]$
 % ==> [A][A] 4161 (pTeX p4.0.0)
 ```
 
-日本語化パッチの該当部分が TeX 2（7 ビット入力のみ対応していた）の頃のままになっており，数式モードで入力された 128--255 番の文字が「{{{\mathcode}}} はその文字の文字コードの値」のように扱われていたのが原因です．
+日本語化パッチの該当部分が TeX 2（7 ビット入力のみ対応していた）の頃のままになっており，数式モードで入力された 128--255 番の文字が「`\mathcode` はその文字の文字コードの値」のように扱われていたのが原因です．
 
 ## e-pTeX
 ### `\showstream` プリミティブの追加
@@ -357,54 +357,56 @@ TeX は，同時に 0--15 の 16 個の入出力ストリームを持つこと�
 \show\cs\showthe\baselineskip
 \bye
 ```
-*** ここから先はまだフォーマット未変換 ***
 
 ### `\vadjust pre`  のサポート
- * [https://twitter.com/golden_lucky/status/1395655595844272131 golden_lucky さんの Twitter]，[https://github.com/texjporg/tex-jp-build/pull/115 tex-jp-build/115] 
+ * [golden_lucky さんの Twitter](https://twitter.com/golden_lucky/status/1395655595844272131)，[tex-jp-build/115](https://github.com/texjporg/tex-jp-build/pull/115) 
 
-{{{\vadjust{}}} ''vertical material'' {{{} }}} プリミティブを使うことで「現在の行の直後」に ''vertical material'' を挿入することができることはよく知られています．
+`\vadjust{`*vertical material*`}` プリミティブを使うことで「現在の行の直後」に *vertical material* を挿入することができることはよく知られています．
 
-さらに pdfTeX, !XeTeX, !LuaTeX  では {{{\vadjust pre{}}} ''vertical material'' {{{} }}} とすることで「現在の行の直前」に''vertical material'' を挿入することができるようになっていますが，これが e-pTeX にも追加されました．
-なお，前の行に {{{\vadjust}}} が，次の行に {{{\vadjust pre}}} があった場合は
- （前の行）→（前の行の {{{\vadjust}}} 由来）[[br]]→（次の行の {{{\vadjust pre}}} 由来）→（行間グルー）→（次の行）
+さらに pdfTeX, XeTeX, LuaTeX  では `\vadjust pre{`*vertical material*`}` とすることで「現在の行の直前」に *vertical material* を挿入することができるようになっていますが，これが e-pTeX にも追加されました．
+なお，前の行に `\vadjust` が，次の行に `\vadjust pre` があった場合は
+>（前の行）→（前の行の `\vadjust` 由来）→（次の行の `\vadjust pre` 由来）→（行間グルー）→（次の行）
+
 の順序で組まれます．
 
-=== {{{\suppresslongerror}}}  他エラー抑止のプリミティブの追加 ===
- * [https://github.com/texjporg/tex-jp-build/pull/127 tex-jp-build/127]
+### `\suppresslongerror`  他エラー抑止のプリミティブの追加
+ * [tex-jp-build/127](https://github.com/texjporg/tex-jp-build/pull/127)
 
-!LuaTeX に実装されている次のエラー抑止のためのプリミティブを実装しました：
- * {{{\suppresslongerror}}}：0 でない場合，{{{\long}}} なしマクロの引数に {{{\par}}} が含まれた場合のエラーを抑止する
- * {{{\suppressoutererror}}}：0 でない場合，{{{\outer}}} 付きマクロが禁止されている状況で {{{\outer}}} 付きマクロが来た場合のエラーを抑止する
- * {{{\suppressmathparerror}}}：0 でない場合，数式モード中に {{{\par}}} が来た場合のエラーを抑止する
+LuaTeX に実装されている次のエラー抑止のためのプリミティブを実装しました：
+ * `\suppresslongerror`：0 でない場合，`\long` なしマクロの引数に `\par` が含まれた場合のエラーを抑止する
+ * `\suppressoutererror`：0 でない場合，`\outer` 付きマクロが禁止されている状況で `\outer` 付きマクロが来た場合のエラーを抑止する
+ * `\suppressmathparerror`：0 でない場合，数式モード中に `\par` が来た場合のエラーを抑止する
 既定値はいずれも 0（つまり従来通りの動作）です．
 
-詳しくは [https://adventar.org/calendars/6724 TeX ＆ LaTeX Advent Calendar 2021] の私の記事「[https://qiita.com/h-kitagawa/items/de963380bd3e576ab4e3 e-(u)pTeX をいじってみた話]」前半部の「ネタ 1」を参照してください．
+詳しくは [TeX ＆ LaTeX Advent Calendar 2021](https://adventar.org/calendars/6724) の私の記事「 [e-(u)pTeX をいじってみた話](https://qiita.com/h-kitagawa/items/de963380bd3e576ab4e3)」前半部の「ネタ 1」を参照してください．
 
 
-=== {{{\lastnodefont}}} プリミティブの追加 ===
- * [https://gist.github.com/aminophen/70f55a916b27deb27d41c8bbfe558c19 aminophen さんの Gist「e-(u)ptex: Add \lastnodefont primitive」]
+### `\lastnodefont` プリミティブの追加
+ * [aminophen さんの Gist「e-(u)ptex: Add \lastnodefont primitive」](https://gist.github.com/aminophen/70f55a916b27deb27d41c8bbfe558c19)
 
-以前，[https://ja.osdn.net/projects/eptex/wiki/lastnodechar \lastnodechar プリミティブについて]に
-> 文字コードと同様に，「最後の和文文字のフォント」を知る方法は現時点ではなく，新たに \lastnodefont とでもいう命令を作る以外にないでしょう
+以前，[ \lastnodechar プリミティブについて](../lastnodechar/)に
+> 文字コードと同様に，「最後の和文文字のフォント」を知る方法は現時点ではなく，
+> 新たに \lastnodefont とでもいう命令を作る以外にないでしょう
 
-と書きましたが，(e-)upTeX においては「文字コードが 256 未満の和文文字ノード」が存在する関係で，{{{\lastnodechar}}} の値だけでは最後の文字が和文か欧文か判別できませんでした．これを解決するため，e-pTeX の段階で {{{\lastnodefont}}} が追加されました．
+と書きましたが，(e-)upTeX においては「文字コードが 256 未満の和文文字ノード」が存在する関係で，`\lastnodechar` の値だけでは最後の文字が和文か欧文か判別できませんでした．これを解決するため，e-pTeX の段階で `\lastnodefont` が追加されました．
 
-=== {{{\lastnodesubtype}}} の数式モードでの挙動変更 ===
- * [https://github.com/texjporg/tex-jp-build/issues/104 tex-jp-build/104]
+### `\lastnodesubtype` の数式モードでの挙動変更
+ * [tex-jp-build/104](https://github.com/texjporg/tex-jp-build/issues/104)
 
-数式モードにおいては，e-TeX 拡張の「現在構築中のリストの最後のノードの種別」を与える {{{\lastnodetype}}} の値はみな 15 (math mode nodes) であり，ほとんど意味をなしていませんでした．
-e-pTeX では {{{\lastnodetype}}} を補完する {{{\lastnodesubtype}}} プリミティブがありますが，数式モードではこれもほぼ役に立ちませんでした．
+数式モードにおいては，e-TeX 拡張の「現在構築中のリストの最後のノードの種別」を与える `\lastnodetype` の値はみな 15 (math mode nodes) であり，ほとんど意味をなしていませんでした．
+e-pTeX では `\lastnodetype` を補完する `\lastnodesubtype` プリミティブがありますが，数式モードではこれもほぼ役に立ちませんでした．
 
-e-pTeX 210701 以降では，数式モードにおいて {{{\lastnodesubtype}}} が「意味のある」情報を返すようにしました．
+e-pTeX 210701 以降では，数式モードにおいて `\lastnodesubtype` が「意味のある」情報を返すようにしました．
 詳細は e-pTeX のマニュアルを見てもらうことにして，一部を述べると以下のようになります：
-|| '''値 ''' || '''意味''' ||
-|| 1 || {{{\mathchoice}}} ||
-|| 2 || {{{\mathord}}} ||
-|| 3--5 || {{{\mathop}}}（{{{\displaylimits}}}, {{{\limits}}}, {{{\nolimits}}} で異なる値）||
-|| 6 || {{{\mathbin}}} ||
-|| 7 || {{{\mathrel}}} ||
-|| 8 || {{{\mathopen}}} ||
-|| 9 || {{{\mathclose}}} ||
-|| 10 || {{{\mathpunct}}} ||
-|| 11 || {{{\mathinner}}} ||
+| 値 | 意味 |
+| --- | --- |
+| 1 | `\mathchoice` |
+| 2 | `\mathord` |
+| 3--5 | `\mathop`（`\displaylimits`, `\limits`, `\nolimits` で異なる値）|
+| 6 | `\mathbin` |
+| 7 | `\mathrel` |
+| 8 | `\mathopen` |
+| 9 | `\mathclose` |
+| 10 | `\mathpunct` |
+| 11 | `\mathinner` |
 
