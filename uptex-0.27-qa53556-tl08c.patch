@@ -1,0 +1,24 @@
+diff -ud texlive-20080816-source/texk/web2c/uptexdir.orig/uptex-base.ch texlive-20080816-source/texk/web2c/uptexdir/uptex-base.ch
+--- texlive-20080816-source/texk/web2c/uptexdir.orig/uptex-base.ch	2009-08-18 21:44:12.637866950 +0900
++++ texlive-20080816-source/texk/web2c/uptexdir/uptex-base.ch	2009-08-18 21:44:44.301864485 +0900
+@@ -2723,7 +2723,7 @@
+   begin cur_cmd:=relax; cur_chr:=256;
+   end;
+ @y
+-if (cur_cmd<=kanji)and(cur_cmd<=hangul) then
++if (cur_cmd>=kanji)and(cur_cmd<=hangul) then
+   begin m:=cur_cmd; n:=cur_chr;
+   end
+ else if (cur_cmd>active_char)or(cur_chr>255) then
+diff -ud texlive-20080816-source/texk/web2c/euptexdir.orig/euptex-base.ch texlive-20080816-source/texk/web2c/euptexdir/euptex-base.ch
+--- texlive-20080816-source/texk/web2c/euptexdir.orig/uptex-base.ch	2009-08-18 21:44:12.637866950 +0900
++++ texlive-20080816-source/texk/web2c/euptexdir/uptex-base.ch	2009-08-18 21:44:44.301864485 +0900
+@@ -2723,7 +2723,7 @@
+   begin cur_cmd:=relax; cur_chr:=256;
+   end;
+ @y
+-if (cur_cmd<=kanji)and(cur_cmd<=hangul) then
++if (cur_cmd>=kanji)and(cur_cmd<=hangul) then
+   begin m:=cur_cmd; n:=cur_chr;
+   end
+ else if (cur_cmd>active_char)or(cur_chr>255) then

@@ -1,0 +1,48 @@
+diff -udr /tmp/eptex-100420//0eptex.sh eptex-100420//0eptex.sh
+--- /tmp/eptex-100420//0eptex.sh	2010-04-20 15:54:55.000000000 +0900
++++ eptex-100420//0eptex.sh	2010-05-30 20:11:08.440764139 +0900
+@@ -17,12 +17,12 @@
+   # the content of ptex-src-3.1.11-box.patch is already in 
+   # ptex-base.ch.0308.diff in ptex-qtrip.
+   cat ../ptexlive-$PTEXLIVE_VER/archive/ptex-src-3.1.11-box.patch | \
+-    (cd $WEBDIR/ptexdir; patch -p0 -R ) || exit 1
++    (cd $WEBDIR/ptexdir; $PATCH -p0 -R ) || exit 1
+   tarx ../ptex-qtrip-$QTRIP_VER.tar.gz $TMP_PREFIX
+   (cd $TMP_PREFIX/ptex-qtrip;
+   for x in ptex-base.ch.*.diff; do
+     echo "[patching]   $x"
+-    cat $x | (cd $WEBDIR/ptexdir; patch -p0)
++    cat $x | (cd $WEBDIR/ptexdir; $PATCH -p0)
+   done
+   )
+ fi
+@@ -52,7 +52,7 @@
+ echo "[rewriting]  autoreconf in $WEBDIR"
+ (cd $WEBDIR ; autoreconf --verbose)
+ echo "[rewriting]  configure"
+-cat $WEBDIR/configure | sed "s/fiif/fi\nif/;s/esac#/esac\n#/" > $WEBDIR/configure.new
++cat $WEBDIR/configure | sed "s/fiif/fi;if/;s/esac#/esac;#/" > $WEBDIR/configure.new
+ mv $WEBDIR/configure.new $WEBDIR/configure || exit 1
+ chmod +x $WEBDIR/configure
+ 
+@@ -66,6 +66,8 @@
+ echo "[copying]    eptex.src"
+ mkdir -p $TEXMF/ptex/plain/base
+ cp eptex.src $TEXMF/ptex/plain/base/ || exit 1
++echo "[copying]    eptexdefs.lib"
++cp eptexdefs.lib $TEXMF/ptex/plain/base/ || exit 1
+ echo "[copying]    language.def"
+ mkdir -p $TEXMF/ptex/generic/config
+ cp language.def $TEXMF/ptex/generic/config/ || exit 1
+diff -udr /tmp/eptex-100420//6babel.sh eptex-100420//6babel.sh
+--- /tmp/eptex-100420//6babel.sh	2010-04-20 15:27:36.000000000 +0900
++++ eptex-100420//6babel.sh	2010-05-30 20:11:26.640835796 +0900
+@@ -13,7 +13,7 @@
+      mv $TEXMF/ptex/platex/config/hyphen.cfg \
+         $TEXMF/ptex/platex/config/hyphen.cfg.ptex
+ 
+-LOADHYPH_SED="s/\\\\ifx\\\\secondarg\\\\empty/\\\\ifx\\\\false/"
++LOADHYPH_SED="s/\\\\ifx\\\\secondarg\\\\empty/\\\\iffalse/"
+ 
+ # usage: forcenoutf8 $TEXMF path name
+ # loadhyph-*.tex use greek characters to detect whether the engine is
