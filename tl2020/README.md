@@ -121,7 +121,7 @@ pTeX 3.8.3 では，\` の後に続けられるものの判定を更に厳しく
 ```
 
 このエラーは，ファイル名を UTF-8 から pTeX の内部エンコーディングに変換する ptexenc の `ptenc_from_utf8_string_to_internal_enc` 関数中のミスが原因でした．結果を格納する buffer = buf という 2 配列は，長さが足りなくなりそうなときに `xrealloc` で長さを増やして再確保されますが，そのとき buffer のみが再確保されてしまう（buf は古いアドレスのまま残る）コードになっていました．
-TeX Live には[すぐ上の修正](https://github.com/h-kitagawa/eptex-wiki/main/tl2020/README.md#%E4%B8%8D%E6%AD%A3%E3%81%AA-utf-8-%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%E3%81%8C-jis-x-0208-%E6%9C%AA%E5%AE%9A%E7%BE%A9%E3%81%AE%E5%92%8C%E6%96%87%E6%96%87%E5%AD%97%E3%81%AB%E5%8C%96%E3%81%91%E3%82%8B%E7%97%87%E7%8A%B6%E3%82%92%E4%BF%AE%E6%AD%A3)と同時に取り込まれました．
+TeX Live には[すぐ上の修正](https://github.com/h-kitagawa/eptex-wiki/blob/main/tl2020/README.md#%E4%B8%8D%E6%AD%A3%E3%81%AA-utf-8-%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%E3%81%8C-jis-x-0208-%E6%9C%AA%E5%AE%9A%E7%BE%A9%E3%81%AE%E5%92%8C%E6%96%87%E6%96%87%E5%AD%97%E3%81%AB%E5%8C%96%E3%81%91%E3%82%8B%E7%97%87%E7%8A%B6%E3%82%92%E4%BF%AE%E6%AD%A3)と同時に取り込まれました．
 
 ### `\kansujichar` の取得が可能に
  * [tex-jp-build/93](https://github.com/texjporg/tex-jp-build/issues/93)
