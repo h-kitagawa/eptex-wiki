@@ -1,10 +1,10 @@
 #!/bin/bash
-cat $1 | \
+cat README.pukiwiki | \
 sed -e 's/ \[#[0-9a-z]\+\]$//g' -e 's/^====/####/g' -e 's/^===/###/g' -e 's/^==/##/g' -e 's/^=/#/g' \
   -e 's/^---/        -/g' -e 's/^--/    -/g' -e 's/^\(\s*\)-\([^ ]\)/\1- \2/g' \
   -e 's/\[\[br\]\]/<br>/g' -e 's/^{{{\s*code tex/```tex/' -e 's/^{{{/```/' -e 's/^}}}/```/' \
-  -e 's/%%/~~/g' -e "s/^\#lsx/`echo -ne '\u0024'`lsx()/g" -e "s/''/*/g" -e "s/^ /> /" \
+  -e 's/%%/~~/g' -e "s/^\#lsx/`echo -ne '\u0024'`lsx()/g" -e "s/''/*/g" -e "s/^\s\s*\([^*]\)/> \1/" \
   -e 's/{{{/`/g' -e 's/}}}/`/g' -e 's/\[\([^ ]*\) \([^]]*\)\]/[\2](\1)/g' \
-> `echo $1|sed s/.pukiwiki/.md/`
+> README.md
 
 
