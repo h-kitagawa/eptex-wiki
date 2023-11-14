@@ -30,9 +30,11 @@ TeX Live 2020 には pTeX p3.8.3 と e-pTeX 191112 が収録されています�
 
 TeX Live 2019 では 2019-05-30 のリビルド後の pTeX p3.8.2，及び TeX Live 2020 の pTeX p3.8.3 では，
 > pTeX では，和文カテゴリーコードは和文文字トークンには保存されず，その都度算出される
+
 という挙動で統一させるため，`\if`, `\ifcat` の修正を行いました．これによって，pTeX p3.8.3 では，上記ソースの (1) の `\ifcat` では
 >  「`あ`」：ソース中に直書きされた和文文字トークン→`\ifcat` 時の和文カテゴリーコードは 17<br>
 >  `\yA`：`\let`でできた和文文字トークン→`\ifcat` 時の和文カテゴリーコードは 17
+
 と，「和文カテゴリーコード 17 の『あ』」同士が比較され，結果は `O` となります．
 
 ### `\if`, `\ifcat` における制御綴の扱い【R】
@@ -119,7 +121,7 @@ pTeX 3.8.3 では，\` の後に続けられるものの判定を更に厳しく
 ```
 
 このエラーは，ファイル名を UTF-8 から pTeX の内部エンコーディングに変換する ptexenc の `ptenc_from_utf8_string_to_internal_enc` 関数中のミスが原因でした．結果を格納する buffer = buf という 2 配列は，長さが足りなくなりそうなときに `xrealloc` で長さを増やして再確保されますが，そのとき buffer のみが再確保されてしまう（buf は古いアドレスのまま残る）コードになっていました．
-TeX Live にはすぐ上の修正と同時に取り込まれました．
+TeX Live には[すぐ上の修正](https://github.com/h-kitagawa/eptex-wiki/main/tl2020/README.md#%E4%B8%8D%E6%AD%A3%E3%81%AA-utf-8-%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%E3%81%8C-jis-x-0208-%E6%9C%AA%E5%AE%9A%E7%BE%A9%E3%81%AE%E5%92%8C%E6%96%87%E6%96%87%E5%AD%97%E3%81%AB%E5%8C%96%E3%81%91%E3%82%8B%E7%97%87%E7%8A%B6%E3%82%92%E4%BF%AE%E6%AD%A3)と同時に取り込まれました．
 
 ### `\kansujichar` の取得が可能に
  * [tex-jp-build/93](https://github.com/texjporg/tex-jp-build/issues/93)
@@ -160,7 +162,7 @@ TeX Live にはすぐ上の修正と同時に取り込まれました．
 ```
 
 
-ちなみに，2020-02-09 現在[検討中の実装](https://github.com/texjporg/platex/tree/for-tl2020) では e-TeX 拡張を使う代わりに `\ifjfont`, `\iftfont` プリミティブを使わない方針になっています．
+ちなみに，2020-02-09 現在[検討中の実装](https://github.com/texjporg/platex/tree/for-tl2020)では e-TeX 拡張を使う代わりに `\ifjfont`, `\iftfont` プリミティブを使わない方針になっています．
 
 ### `\input` プリミティブでブレースで囲まれたファイル名指定が可能に
  * [TeX Live svn r53729](https://www.tug.org/svn/texlive?view=revision&revision=53729)
@@ -253,13 +255,12 @@ e-pTeX 190709 では，次のように挙動が拡張・統一されました．
    * ⟨*number*⟩ が 0 以上のときは文字コードとみなし，和文文字コードとして有効か否かの判定や，文字コード ⟨*number*⟩ 番の文字の寸法取得（和文文字コードとして無効ならば 0 pt）を行う．
    * ⟨*number*⟩ が負のときは，文字タイプ -(⟨*number*⟩+1) についての存在判定・寸法取得（存在しない文字タイプについては 0 pt）を行う．
 
-** ここまでフォーマット変換 **
 
 ### `\readline` で和文が取得できない症状を修正
  * [tex-jp-build/88](https://github.com/texjporg/tex-jp-build/issues/88)
 
 e-TeX の拡張プリミティブ `\readline` の和文対応処理が抜けていたことが判明したので，e-pTeX 190908 で修正されました．
-それより前の e-pTeX では，次のソースで 2 つめの `\Y` の実行結果が `[ではなく `[ťÁżú‚](漢字‚]`)` に化けてしまいます．
+それより前の e-pTeX では，次のソースで 2 つめの `\Y` の実行結果が `[漢字]` ではなく `[ťÁżú‚]` に化けてしまいます．
 ```tex
 \font\x=ec-lmtt10\x
 
@@ -268,10 +269,10 @@ e-TeX の拡張プリミティブ `\readline` の和文対応処理が抜けて�
 \closeout0
 
 \openin0=hoge.out
-\read0to\Y     [==> [漢字](\Y]%)
+\read0to\Y     [\Y] % ==> [漢字]
 \closein0
 \openin0=hoge.out
-\readline0to\Y [==> [ťÁżú‚](\Y]%) (!?)
+\readline0to\Y [\Y] % ==> [ťÁżú‚]
 \closein0
 
 \bye
@@ -297,6 +298,7 @@ pTeX には
 > auto spacing mode;
 > auto xspacing mode.
 ```
+
 のように端末やログに出力されますが，`\show` などと同様にタイプセットが一旦停止してしまいます．
 また，最後の `\`(`enable`|`disable`|`force`)`cjktoken` の状態を返すプリミティブはありませんでした．
 
@@ -358,9 +360,9 @@ TeX Live 2020，およびそれ以前の pTeX 系列ではこれをトリッキ�
 \bye
 ```
 
-しかし，将来このトリッキーな使い方が[封じられる可能性](https://github.com/texjporg/tex-jp-build/issues/81) があるため，そうなる前に e-pTeX で `\Uchar`, `\Ucharcat` が実装されたことになります．
+しかし，将来このトリッキーな使い方が[封じられる可能性](https://github.com/texjporg/tex-jp-build/issues/81)があるため，そうなる前に e-pTeX で `\Uchar`, `\Ucharcat` が実装されたことになります．
 
 
-#### コメント ====
-  * おっと，早とちりしていました，修正しました．[[id:h7k h7k]([BR]]--) (2020-12-19 19:11:41 JST)
-  * \currentcjktoken は正しくは \enablecjktoken ならば 0，\disablecjktoken ならば 1 です。[[id:aminophen aminophen]([BR]]--) (2020-12-19 13:36:05 JST)
+#### コメント
+  * おっと，早とちりしていました，修正しました．-- h7k (2020-12-19 19:11:41 JST)
+  * \currentcjktoken は正しくは \enablecjktoken ならば 0，\disablecjktoken ならば 1 です。-- aminophen (2020-12-19 13:36:05 JST)
