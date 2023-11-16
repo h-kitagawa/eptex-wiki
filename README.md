@@ -19,9 +19,10 @@
 
 なお，最近は，[LuaTeX-ja]([http://sourceforge.jp/projects/luatex-ja/wiki/FrontPage) プロジェクトの方を中心に取り組んでいます．
 
- * TeX Live 2021→2022 に伴う pTeX, e-pTeX の変更点については [こちら](tl2022/) を参照して下さい．
- * TeX Live 2019→2020 に伴う pTeX, e-pTeX の変更点については [こちら](tl2020/) を参照して下さい．
- * TeX Live 2017→2018 に伴う pTeX, e-pTeX の変更点については [こちら](tl2018/) を参照して下さい．
+ * TeX Live 2021→2022 に伴う pTeX, e-pTeX の変更点については [こちら](tl2022/README.md) を参照して下さい．
+ * TeX Live 2019→2020 に伴う pTeX, e-pTeX の変更点については [こちら](tl2020/README.md) を参照して下さい．
+ * TeX Live 2017→2018 に伴う pTeX, e-pTeX の変更点については [こちら](tl2018/README.md) を参照して下さい．
+ * e-pTeX 141109 以降に導入された`\lastnodechar` プリミティブについては，[`\lastnodechar` プリミティブについて](lastnodechar/README.md) を参照して下さい．
 
 <!--
 以下は TL11 以降の情報
