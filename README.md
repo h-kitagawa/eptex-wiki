@@ -41,7 +41,7 @@
 -->
 
 ## その他の情報
- * 以前の版は，[旧版のページ](old_versions/) からたどれます．
+ * ~~以前の版は，[旧版のページ](old_versions/) からたどれます．~~ **整備中**
  * 文書類：
    * 「pTeX 系列の文字列化における和文欧文の区別」（[TeXConf 2019（中止）](https://texconf2019.tumblr.com/)，北川）
      * 使う予定だったスライドの [PDF](https://github.com/h-kitagawa/presentations/blob/main/tc19ptex.pdf)
