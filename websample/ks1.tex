@@ -1,0 +1,355 @@
+\input jwebmac
+\def\WEB{{\tt WEB}}\def\pascal{{\sc PASCAL}}\def\title{{\tt ks1.web}}
+\def\,{\hskip0.25zw}\baselineskip=15pt
+
+
+\N1.  Carmichael数の表示：\WEB の実例.
+以下のプログラムは，僕が計算数学Iのレポートで書いた{\tt ks1.f90}と実質
+的に同じものである（\pascal に変換してある）．
+
+\medskip
+
+プログラムに入る前に，数学的な考察をしよう．
+
+\medskip\noindent{\bf Definition}\hskip1em%
+合成数$n$が，$\forall a\in{\bf N}_{>0}$; $(a,n)=1\Longrightarrow
+a^{n-1}\equiv 1\pmod n$を満たすとき，$n$はCarmichael数%
+であるという．
+
+\medskip\noindent{\bf Theorem} (Korselt)\hskip1em%
+%
+正の合成数$n$がCarmichael数である必要十分条件は，
+$n$は2乗因子を持たず，任意の$n$の素因数$p$について，$p-1\mid n-1$．
+
+\medskip\noindent{\bf Proof.}
+まず，$n$がCarmichael数で，$p$を任意の$n$の素因数とする．$p^n\equiv
+p\pmod n$ なので，$n\mid p^n-p=p(p^{n-1}-1)$．$n\ge 2$より，
+$(p,p^{n-1}-1)=(p,-1)=1$だから，$p(p^{n-1}-1)$は$p^2$で割れない．よって
+$n$もそうである．よって$n$は2乗因子を持たない．また，$a$を$({\bf
+F}_p)^\times$の生成元とすると，当然$(a,p)=1$．よって
+$a^{n-1}\equiv 1\pmod p$．ここで，$a$は位数が$p-1$だから，$p-1\mid n-1$．
+
+一方，$n$が定理の後半の条件を満たすとする．$n$のすべての素因数は異なるか
+ら，中国剰余定理より，任意の$n$の素因数$p$について，$\forall a$;\
+$(a,p)=1\Longrightarrow a^{n-1}\equiv 1\pmod p$を示せばよい．
+まずfermatの小定理から
+$a^{p-1}\equiv 1\pmod p$．$p-1\mid n-1$より，$a^{n-1}\equiv 1\pmod p$．
+
+\medskip\noindent{\bf Prop.}\hskip1em
+Carmichael数$n$は奇数．
+
+\medskip\noindent{\bf Proof.}
+$n$が偶数だとする．$(n-1)^n\equiv (-1)^n\equiv 1\pmod n$だが，Carmichael
+数の性質から$(n-1)^n\equiv -1\pmod n$．これは$n=1$, 2となるが，どちらも
+Carmichael数ではない．
+
+\medskip\noindent{\bf Prop.}\hskip1em
+Carmichael数$n$は3つ以上の素因数の積となる．
+
+\medskip\noindent{\bf Proof.}
+そうでなかったとすると，$n$は合成数だから$n$は2つの異なる素数の積$pq$．
+$p-1\mid n-1$だが，$n-1=pq-1=(p-1)q+(q-1)$だから，$p-1\mid q-1$．同様に
+$q-1\mid p-1$．よって$q=p$．矛盾．
+
+\fi
+
+\M2. Fortranの{\tt RETURN}文と同等のものが\pascal にはない（少なくとも僕
+は知らない）．そのため，関数の途中で戻るという場合には{\bf goto}
+\\{exit}として関数末尾に制御を渡すことにしている．E. W.~Dijkstraが``Go
+to Statement Considered Harmful''とか言ってるけども，それは無視しよう．
+
+\pascal ではlabelは数字でなければならないらしい．ということで，ここで
+\\{exit}ラベルを数字の1として定義しておこう．
+
+\Y\P\D \37$\\{exit}=1$\par
+\fi
+
+\N3.  program本体.  このプログラムでは計算する上限値\\{bound}を入力し，最初
+に$\sqrt{\hbox{\\{bound}}}$までの素数表を作成する．次に，3から\,\|n\,ま
+での各奇数について，それがCarmichael数であるかの評価を行い，Carmichael
+数と判断されれば出力する．
+
+\Y\P\4\&{program}\1\  \37\\{ks1};\6
+\4\&{label} \37\\{exit};\6
+\X6:Global consts\X\6
+\X4:Global variables\X\6
+\X15:Functions\X\6
+\&{begin} \37\X5:Input \\{bound}\X\6
+\X8:Make prime table\X \6
+\&{for} $\|i\K3\mathrel{\&{to}}\\{bound}$ \1\&{do}\6
+\&{if} $\\{odd}(\|i)$ \1\&{then}\ \X19:Is \|i a Carmichael number?\X\2\2\6
+\4\\{exit}: \37; \6
+\&{end} .\par
+\fi
+
+\M4. \P$\X4:Global variables\X\S$\6
+\4\&{var} \37$\\{bound},\39\|i$: \37\\{integer};\par
+\As7, 11\ETs18.
+\U3.\fi
+
+\M5. \\{bound}\,の入力では，少なすぎる値や多すぎる値を排除するようにした．
+下限は2，上限は\\{max}である．
+
+\Y\P$\4\X5:Input \\{bound}\X\S$\6
+$\\{read\_ln}(\\{bound})$;\6
+\&{if} $\\{bound}\L2$ \1\&{then}\6
+\&{begin} \37$\\{write\_ln}(\.{\'nothing\ to\ compute.\'})$;\5
+\&{goto} \37\\{exit}\6
+\&{end}\6
+\4\&{else} \&{if} $\\{bound}>\\{max}$ \1\&{then}\6
+\&{begin} \37$\\{write\_ln}(\.{\'too\ large\ bound.\ I\ change\ bound\ to\ \'},%
+\39\\{max},\39\.{\'.\'})$;\5
+$\\{bound}\K\\{max}$\6
+\&{end};\2\2\par
+\U3.\fi
+
+\M6. \\{max}\,の値は単純に最初に確保する配列の大きさを制御するだけで，計算
+速度とかには何も影響しない．だが，まあ，1000万ぐらいあれば十分だろう．
+
+\Y\P$\4\X6:Global consts\X\S$\6
+\4\&{const} \37$\\{max}=10000000$;\par
+\U3.\fi
+
+\N7.  素数表の作成.
+古典的なEratosthenesの篩を用いて素数表の作成を行う．それは配列
+\,\\{iptd}\, を用いる．そのままでは素数のところを参照するのが非効率なの
+で，配列\,\\{ipt}\,に素数を大きさの順番に詰めて格納しておく．
+
+\Y\P$\4\X4:Global variables\X\mathrel{+}\S$\6
+\4$\\{iptd},\39\\{ipt}$: \37\&{array} $[1\to\\{max}]$ \1\&{of}\5
+\\{integer};\2\6
+\4$\\{ipnum},\39\\{ipmax},\39\|m$: \37\\{integer};\par
+\fi
+
+\M8. \P$\X8:Make prime table\X\S$\6
+\X10:Initialize prime table\X\6
+\X9:Sieve\X\6
+\X14:Pack prime numbers\X\par
+\U3.\fi
+
+\M9. 篩の方法はよく知られているが，一応述べておこう．
+\medskip
+
+(1)\hskip0.5em2から求めたい素数の上限まで（この場合は\,\|m）を並べておく．
+
+(2)\hskip0.5em残っている最小の数 ($=:a$) に○印をつけて，$2a$, $3a$, $\ldots$に
+は×印をつけていく，
+
+(3)\hskip0.5em全部の数に印がつくまで，(2)を繰り返す．
+
+(4)\hskip0.5em終わったとき，○印がついているのが素数である．
+
+\medskip なお，\|m\,までの素数を求める際には．$\sqrt{\hbox{\|m}}$まで
+の篩にかければ，残りの\,\|m\,までの数は全て篩によって素数しか残らない．
+しかし我々は素数をpackするために素数の数だけは数えなければならない．
+
+\Y\P$\4\X9:Sieve\X\S$\6
+\X12:Main sieve\X\X13:Count primes\X\par
+\U8.\fi
+
+\M10. \P$\X10:Initialize prime table\X\S$\6
+$\|m\K\\{sqrt}(\\{bound})+1$;\6
+\&{for} $\|i\K1\mathrel{\&{to}}\\{bound}$ \1\&{do}\5
+$\\{iptd}[\|i]\K0$;\2\6
+$\\{iptd}[1]\K1$;\5
+$\\{ipnum}\K0$;\5
+$\\{ipmax}\K\|m$;\par
+\U8.\fi
+
+\M11. 次の変数は篩のところで使われるloop counterである．このプログラムでは
+変数をできるかぎりglobal変数で宣言したので，（\|j\,に限らないことだが）
+いろいろな場所と用途で使われる．
+
+\Y\P$\4\X4:Global variables\X\mathrel{+}\S$\6
+\4\|j: \37\\{integer};\C{loop counter}\par
+\fi
+
+\M12. \P$\X12:Main sieve\X\S$\6
+\&{for} $\|i\K2\mathrel{\&{to}}\\{sqrt}(\|m)+1$ \1\&{do}\6
+\&{if} $\\{iptd}[\|i]=0$ \1\&{then}\6
+\&{begin} \37$\\{ipnum}\K\\{ipnum}+1$;\6
+\&{for} $\|j\K2\mathrel{\&{to}}\|m\mathbin{\&{div}}\|i$ \1\&{do}\5
+$\\{iptd}[\|j\ast\|i]\K1$;\2\6
+\&{end};\2\2\par
+\U9.\fi
+
+\M13. \P$\X13:Count primes\X\S$\6
+\&{for} $\|i\K\\{sqrt}(\|m)+2\mathrel{\&{to}}\|m$ \1\&{do}\6
+\&{if} $\\{iptd}[\|i]=0$ \1\&{then}\5
+$\\{ipnum}\K\\{ipnum}+1$;\2\2\par
+\U9.\fi
+
+\M14. \P$\X14:Pack prime numbers\X\S$\6
+$\|i\K1$;\6
+\&{for} $\|j\K2\mathrel{\&{to}}\|m$ \1\&{do}\6
+\&{if} $\\{iptd}[\|j]=0$ \1\&{then}\6
+\&{begin} \37$\\{ipt}[\|i]\K\|j$;\5
+$\|i\K\|i+1$\6
+\&{end};\2\2\par
+\U8.\fi
+
+\N15.  平方根.
+僕は\pascal のコンパイラを持っていない．しょうがないのでWeb2Cを用いて
+\pascal コードをCに変換しようと思うが，Web2Cは\TeX とかが使う機能しか
+サポートされておらず，残念ながら平方根を求める\,\\{sqrt}\,とかはサポート
+されていないのだ．
+
+実装方法は凝り出せば切りがないだろうが，ここでは単純にループを回して探
+索することにする．簡易版なので，引数が負の時の処理とかはしない．
+
+\Y\P$\4\X15:Functions\X\S$\6
+\4\&{function}\1\  \37$\\{sqrt}(\|n:\\{integer})$: \37\\{integer};\6
+\4\&{label} \37\\{exit};\2\6
+\&{begin} \37\&{if} $\|n\L1$ \1\&{then}\5
+$\\{sqrt}\K\|n$\6
+\4\&{else} \X16:Main loop of \\{sqrt}\X\2\6
+\4\\{exit}: \37;\6
+\&{end};\par
+\A17.
+\U3.\fi
+
+\M16. \P$\X16:Main loop of \\{sqrt}\X\S$\6
+\&{for} $\|i\K1\mathrel{\&{to}}\\{max}$ \1\&{do}\6
+\&{if} $\|i\ast\|i>\|n$ \1\&{then}\6
+\&{begin} \37$\\{sqrt}\K\|i-1$;\5
+\&{goto} \37\\{exit};\6
+\&{end};\2\2\par
+\U15.\fi
+
+\N17.  Carmichael数の判定.
+Carmichael数の判定には（{\tt ks1.f90}のように）関数を用いることにする．
+基本的には素因数を小さい順に調べていくという形式である．次の関数が判定
+の主要部で，引数がCarmichael数ならば真，そうでなければ偽となる．
+
+ここで，\|n\,の素因数を次々に調べるには，とりあえず「すでに知っている
+素因数で割ったもの」について探索した方が速い．この「すでに知っている素
+因数で割ったもの」が\,\|j\,である．\|k\,は「何個の素因数で割れたか」を
+表す．
+
+\Y\P$\4\X15:Functions\X\mathrel{+}\S$\6
+\4\&{function}\1\  \37$\\{lqf3}(\|n:\\{integer})$: \37\\{boolean};\6
+\4\&{label} \37\\{exit}; \6
+\&{begin} \37$\\{lqf3}\K\\{true}$;\5
+$\|j\K\|n$;\5
+$\|k\K0$; \6
+\&{for} $\|m\K2\mathrel{\&{to}}\\{ipnum}$ \1\&{do} \6
+\&{begin}  \X21:Decomposition's end A\X \6
+\&{if} $\|j\mathbin{\&{mod}}\\{ipt}[\|m]=0$ \1\&{then}\6
+\&{begin} \37\X20:Found a prime divisor of \|n\X\6
+\&{end}\2\6
+\&{end} ;\5
+\X22:Decomposition's end B\X;\6
+\4\\{exit}: \37 \6
+\&{end} ;\par
+\fi
+
+\M18. \P$\X4:Global variables\X\mathrel{+}\S$\6
+\4\|k: \37\\{integer};\par
+\fi
+
+\M19. これは主プログラム中で用いる判定コードである．数値だけを出力すればい
+いものを，わざわざ'\,'という空文字列を前に出力したのは，そうしないと
+Web2CによるCソースがどこか変になってしまうからである．
+
+\Y\P$\4\X19:Is \|i a Carmichael number?\X\S$\6
+\&{if} $\\{lqf3}(\|i)$ \1\&{then}\6
+\&{begin} \37$\\{write\_ln}(\.{\'\'},\39\|i)$;\6
+\&{end};\2\par
+\U3.\fi
+
+\M20. \|n\,の各素因数については，最初に述べた判定条件を確かめる．
+
+\Y\P$\4\X20:Found a prime divisor of \|n\X\S$\6
+$\|j\K\|j\mathbin{\&{div}}\\{ipt}[\|m]$;\5
+$\|k\K\|k+1$;\6
+\&{if} $(\|j\mathbin{\&{mod}}\\{ipt}[\|m]=0)\V((\|n-1)\mathbin{\&{mod}}(%
+\\{ipt}[\|m]-1)\I0)$ \1\&{then}\6
+\&{begin} \37$\\{lqf3}\K\\{false}$;\5
+\&{goto} \37\\{exit};\6
+\&{end}\2\par
+\U17.\fi
+
+\M21. 最初の判定終了条件は，もはや割ろうとしている素数が\,\|j\,を越えてし
+まった場合である．このとき，\|n\,は完全に素因数分解できたことになる．
+このとき，\|n\,は\,\|k\,個の異なる素数の積である．
+
+\Y\P$\4\X21:Decomposition's end A\X\S$\6
+\&{if} $\|j<\\{ipt}[\|m]$ \1\&{then}\6
+\&{begin} \37\&{if} $\|k<3$ \1\&{then}\5
+$\\{lqf3}\K\\{false}$;\2\6
+\&{goto} \37\\{exit}\6
+\&{end};\2\par
+\U17.\fi
+
+\M22. 次の判定終了条件は，\|j\,が$\sqrt{\hbox{\\{bound}}}$以下の素数では割れ
+ずに残った場合である．このとき，$\hbox{\|n}\le\hbox{\\{bound}}$であるか
+ら，\|j\,は\,\|n\,の$\sqrt{\hbox{\\{bound}}}$以上のただ一つの素因数．
+
+\Y\P$\4\X22:Decomposition's end B\X\S$\6
+\&{if} $\|j>1$ \1\&{then}\6
+\&{begin} \37$\|k\K\|k+1$;\6
+\&{if} $(\|n-1)\mathbin{\&{mod}}\|m\I0$ \1\&{then}\5
+$\\{lqf3}\K\\{false}$\2\6
+\&{end};\2\6
+\&{if} $\|k<3$ \1\&{then}\5
+$\\{lqf3}\K\\{false}$;\2\par
+\U17.\fi
+
+\N23.  索引.
+\fi
+
+
+\inx
+\:{{\tt RETURN}文の代替法}, 2.
+\:\\{boolean}, 17.
+\:\\{bound}, 3, \[4], 5, 10, 22.
+\:{Carmichael数の定義}, 1.
+\:{Eratosthenesの篩}, 9.
+\:\\{exit}, \[2], 3, 5, 15, 16, 17, 20, 21.
+\:\\{false}, 20, 21, 22.
+\:\\{integer}, 4, 7, 11, 15, 17, 18.
+\:\\{ipmax}, 7, 10.
+\:\\{ipnum}, 7, 10, 12, 13, 17.
+\:\\{ipt}, 7, 14, 17, 20, 21.
+\:\\{iptd}, 7, 10, 12, 13, 14.
+\:{Korseltの定理}, 1.
+\:\\{ks1}, \[3].
+\:\\{lqf3}, \[17], 19, 20, 21, 22.
+\:\\{max}, 5, 6, 7, 16.
+\:\\{odd}, 3.
+\:\\{read\_ln}, 5.
+\:\\{sqrt}, 10, 12, 13, \[15], 16.
+\:\\{true}, 17.
+\:\\{write\_ln}, 5, 19.
+\fin
+\:\X13:Count primes\X
+\U9.
+\:\X21:Decomposition's end A\X
+\U17.
+\:\X22:Decomposition's end B\X
+\U17.
+\:\X20:Found a prime divisor of \|n\X
+\U17.
+\:\X15, 17:Functions\X
+\U3.
+\:\X6:Global consts\X
+\U3.
+\:\X4, 7, 11, 18:Global variables\X
+\U3.
+\:\X10:Initialize prime table\X
+\U8.
+\:\X5:Input \\{bound}\X
+\U3.
+\:\X19:Is \|i a Carmichael number?\X
+\U3.
+\:\X16:Main loop of \\{sqrt}\X
+\U15.
+\:\X12:Main sieve\X
+\U9.
+\:\X8:Make prime table\X
+\U3.
+\:\X14:Pack prime numbers\X
+\U8.
+\:\X9:Sieve\X
+\U8.
+\con

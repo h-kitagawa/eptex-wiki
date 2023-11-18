@@ -1,0 +1,255 @@
+\def\WEB{{\tt WEB}}\def\pascal{{\sc PASCAL}}\def\title{{\tt ks1.web}}
+\def\,{\hskip0.25zw}\baselineskip=15pt
+
+@* Carmichael数の表示：\WEB の実例.
+以下のプログラムは，僕が計算数学Iのレポートで書いた{\tt ks1.f90}と実質
+的に同じものである（\pascal に変換してある）．
+
+\medskip
+
+プログラムに入る前に，数学的な考察をしよう．
+
+\medskip\noindent{\bf Definition}\hskip1em%
+合成数$n$が，$\forall a\in{\bf N}_{>0}$; $(a,n)=1\Longrightarrow
+a^{n-1}\equiv 1\pmod n$を満たすとき，$n$はCarmichael数%
+@^Carmichael数の定義@>であるという．
+
+\medskip\noindent{\bf Theorem} (Korselt)\hskip1em%
+@^Korseltの定理@>%
+正の合成数$n$がCarmichael数である必要十分条件は，
+ $n$は2乗因子を持たず，任意の$n$の素因数$p$について，$p-1\mid n-1$．
+
+\medskip\noindent{\bf Proof.}
+まず，$n$がCarmichael数で，$p$を任意の$n$の素因数とする．$p^n\equiv
+ p\pmod n$ なので，$n\mid p^n-p=p(p^{n-1}-1)$．$n\ge 2$より，
+ $(p,p^{n-1}-1)=(p,-1)=1$だから，$p(p^{n-1}-1)$は$p^2$で割れない．よって
+ $n$もそうである．よって$n$は2乗因子を持たない．また，$a$を$({\bf
+F}_p)^\times$の生成元とすると，当然$(a,p)=1$．よって
+ $a^{n-1}\equiv 1\pmod p$．ここで，$a$は位数が$p-1$だから，$p-1\mid n-1$．
+
+一方，$n$が定理の後半の条件を満たすとする．$n$のすべての素因数は異なるか
+ ら，中国剰余定理より，任意の$n$の素因数$p$について，$\forall a$;\
+ $(a,p)=1\Longrightarrow a^{n-1}\equiv 1\pmod p$を示せばよい．
+まずfermatの小定理から
+ $a^{p-1}\equiv 1\pmod p$．$p-1\mid n-1$より，$a^{n-1}\equiv 1\pmod p$．
+
+\medskip\noindent{\bf Prop.}\hskip1em
+Carmichael数$n$は奇数．
+
+\medskip\noindent{\bf Proof.}
+$n$が偶数だとする．$(n-1)^n\equiv (-1)^n\equiv 1\pmod n$だが，Carmichael
+ 数の性質から$(n-1)^n\equiv -1\pmod n$．これは$n=1$, 2となるが，どちらも
+ Carmichael数ではない．
+
+\medskip\noindent{\bf Prop.}\hskip1em
+Carmichael数$n$は3つ以上の素因数の積となる．
+
+\medskip\noindent{\bf Proof.}
+そうでなかったとすると，$n$は合成数だから$n$は2つの異なる素数の積$pq$．
+$p-1\mid n-1$だが，$n-1=pq-1=(p-1)q+(q-1)$だから，$p-1\mid q-1$．同様に
+ $q-1\mid p-1$．よって$q=p$．矛盾．
+
+@ Fortranの{\tt RETURN}文と同等のものが\pascal にはない（少なくとも僕
+は知らない）．そのため，関数の途中で戻るという場合には{\bf goto}
+|exit|として関数末尾に制御を渡すことにしている．E. W.~Dijkstraが``Go
+to Statement Considered Harmful''とか言ってるけども，それは無視しよう．
+
+\pascal ではlabelは数字でなければならないらしい．ということで，ここで
+|exit|ラベルを数字の1として定義しておこう@^{\tt RETURN}文の代替法@>．
+
+@d exit=1
+
+
+@* program本体.  このプログラムでは計算する上限値|bound|を入力し，最初
+に$\sqrt{\hbox{|bound|}}$までの素数表を作成する．次に，3から\,|n|\,ま
+での各奇数について，それがCarmichael数であるかの評価を行い，Carmichael 
+数と判断されれば出力する．
+
+@p program ks1;
+  label exit;@/
+  @<Global consts@>@/
+  @<Global variables@>@/
+  @<Functions@>@/
+begin
+  @<Input |bound|@>@/
+  @<Make prime table@>
+  for i:=3 to bound do
+    if odd(i) then@+
+      @<Is |i| a Carmichael number?@>@;
+  exit: ;
+end .
+@ @<Global var...@>=
+  var bound, i: integer;
+
+@ |bound|\,の入力では，少なすぎる値や多すぎる値を排除するようにした．
+下限は2，上限は|max|である．
+
+@<Input |bound|@>=
+  read_ln(bound);
+  if bound<=2 then begin 
+    write_ln('nothing to compute.'); goto exit 
+  end
+  else if bound>max then begin 
+    write_ln('too large bound. I change bound to ',max,'.'); 
+    bound:=max 
+  end;
+
+@ |max|\,の値は単純に最初に確保する配列の大きさを制御するだけで，計算
+速度とかには何も影響しない．だが，まあ，1000万ぐらいあれば十分だろう．
+
+@<Global con...@>=
+  const max=10000000;
+
+@* 素数表の作成.  
+古典的なEratosthenesの篩を用いて素数表の作成を行う．それは配列
+\,|iptd|\, を用いる．そのままでは素数のところを参照するのが非効率なの
+で，配列\,|ipt|\,に素数を大きさの順番に詰めて格納しておく．
+
+@<Global var...@>=
+  iptd, ipt: array [1..max] of integer;
+  ipnum, ipmax, m: integer;
+
+@ @<Make prime table@>=
+  @<Initialize prime table@>@/
+  @<Sieve@>@/
+  @<Pack prime numbers@>
+
+@ 篩の方法@^Eratosthenesの篩@>はよく知られているが，一応述べておこう．
+\medskip
+
+(1)\hskip0.5em2から求めたい素数の上限まで（この場合は\,|m|）を並べておく．
+
+(2)\hskip0.5em残っている最小の数 ($=:a$) に○印をつけて，$2a$, $3a$, $\ldots$に
+は×印をつけていく，
+
+(3)\hskip0.5em全部の数に印がつくまで，(2)を繰り返す．
+
+(4)\hskip0.5em終わったとき，○印がついているのが素数である．
+
+\medskip なお，|m|\,までの素数を求める際には．$\sqrt{\hbox{|m|}}$まで
+の篩にかければ，残りの\,|m|\,までの数は全て篩によって素数しか残らない．
+しかし我々は素数をpackするために素数の数だけは数えなければならない．
+
+@<Sieve@>=
+  @<Main sieve@>@/
+  @<Count primes@>
+
+@ @<Initialize prime table@>=
+  m:=sqrt(bound)+1;
+  for i:=1 to bound do iptd[i]:=0;
+  iptd[1]:=1; ipnum:=0; ipmax:=m;
+
+@ 次の変数は篩のところで使われるloop counterである．このプログラムでは
+変数をできるかぎりglobal変数で宣言したので，（|j|\,に限らないことだが）
+いろいろな場所と用途で使われる．
+
+@<Global var...@>=
+  j: integer; {loop counter}
+
+@ @<Main sieve@>=
+  for i:=2 to sqrt(m)+1 do
+    if iptd[i]=0 then begin 
+      ipnum:=ipnum+1;
+      for j:= 2 to m div i do iptd[j*i] := 1; 
+    end;
+
+@ @<Count primes@>=
+  for i:=sqrt(m)+2 to m do
+    if iptd[i]=0 then ipnum:=ipnum+1;
+
+@ @<Pack ...@>=
+  i:=1;
+  for j:=2 to m do
+    if iptd[j]=0 then begin
+      ipt[i]:=j; i:=i+1
+  end;
+
+@* 平方根.
+僕は\pascal のコンパイラを持っていない．しょうがないのでWeb2Cを用いて
+\pascal コードをCに変換しようと思うが，Web2Cは\TeX とかが使う機能しか
+サポートされておらず，残念ながら平方根を求める\,|sqrt|\,とかはサポート
+されていないのだ．
+
+実装方法は凝り出せば切りがないだろうが，ここでは単純にループを回して探
+索することにする．簡易版なので，引数が負の時の処理とかはしない．
+
+@<Functions@>=
+  function sqrt(n: integer): integer;
+    label exit;
+  begin
+    if n<=1 then sqrt:=n
+    else @<Main loop of |sqrt|@>@/
+  exit: ;
+  end;
+
+@ @<Main loop of |sqrt|@>=
+  for i:=1 to max do
+      if i*i>n then begin
+        sqrt:=i-1;goto exit;
+      end;
+
+@* Carmichael数の判定.
+Carmichael数の判定には（{\tt ks1.f90}のように）関数を用いることにする．
+基本的には素因数を小さい順に調べていくという形式である．次の関数が判定
+の主要部で，引数がCarmichael数ならば真，そうでなければ偽となる．
+
+ここで，|n|\,の素因数を次々に調べるには，とりあえず「すでに知っている
+素因数で割ったもの」について探索した方が速い．この「すでに知っている素
+因数で割ったもの」が\,|j|\,である．|k|\,は「何個の素因数で割れたか」を
+表す．
+
+@<Functions@>=
+  function lqf3(n: integer): boolean;
+    label exit;
+  begin
+    lqf3:=true; j:=n; k:=0;
+    for m:=2 to ipnum do begin
+      @<Decomposition's end A@>
+      if j mod ipt[m] = 0 then begin
+        @<Found a prime divisor of |n|@>
+      end
+    end;
+    @<Decomposition's end B@>;
+    exit:
+  end;
+
+@ @<Global var...@>=
+    k: integer;
+
+@ これは主プログラム中で用いる判定コードである．数値だけを出力すればい
+いものを，わざわざ'\,'という空文字列を前に出力したのは，そうしないと
+Web2CによるCソースがどこか変になってしまうからである．
+
+@<Is |i| a Carmichael number?@>=
+  if lqf3(i) then begin
+    write_ln('', i);
+  end;     
+
+@ |n|\,の各素因数については，最初に述べた判定条件を確かめる．
+
+@<Found a prime divisor of |n|@>=
+  j:=j div ipt[m]; k:=k+1;
+  if (j mod ipt[m]=0) or ((n-1) mod (ipt[m]-1) <> 0) then
+    begin lqf3:=false; goto exit; end
+
+@ 最初の判定終了条件は，もはや割ろうとしている素数が\,|j|\,を越えてし
+まった場合である．このとき，|n|\,は完全に素因数分解できたことになる．
+このとき，|n|\,は\,|k|\,個の異なる素数の積である．
+
+@<Decomposition's end A@>=
+  if j<ipt[m] then begin
+    if k<3 then lqf3:=false;
+    goto exit
+  end;
+
+@ 次の判定終了条件は，|j|\,が$\sqrt{\hbox{|bound|}}$以下の素数では割れ
+ずに残った場合である．このとき，$\hbox{|n|}\le\hbox{|bound|}$であるか
+ら，|j|\,は\,|n|\,の$\sqrt{\hbox{|bound|}}$以上のただ一つの素因数．
+
+@<Decomposition's end B@>=
+  if j>1 then begin
+    k:=k+1; if (n-1) mod m <> 0 then lqf3:=false
+  end;
+  if k<3 then lqf3:=false;
+
+@* 索引.

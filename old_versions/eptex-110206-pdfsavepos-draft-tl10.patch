@@ -1,0 +1,334 @@
+# eptex-110206-pdfsavepos-draft-tl10.patch
+#
+# 注意：動作検証を十分にしていません．予告なしに実装が変更される可能性もあります．
+#
+# 1. このパッチは，次の primitive を追加します：
+#   \pdfsavepos, \pdflastxpos, \pdflastypos, \pdfpagewidth, \pdfpageheight
+#   いずれも pdfTeX 由来のものですが，pTeX 向けに少々のコード修正をしてあります．
+#   例えば，組方向が 横/縦/dtou のいずれの場合にも，\pdflastxpos, \pdflastypos
+#   はそれぞれ本来の「水平」「垂直」方向の位置をさすようにしています．
+# 2. \special{papersize=100pt,200pt} のような papersize special を解釈し，
+#   値に応じて \pdfpagewidth, \pdfpageheight の値を変更します．
+#   但し，簡易実装のため，
+#   ・ 許される長さの単位は pt のみ．空白を入れることも未サポート
+#   ・ 解釈は \shipout 時に行われます．そのため，同じページに2つ以上
+#      書いた場合や，本 special の前に \pdflastypos 等を出力する場合は
+#      結果が変更が反映されません．よくやられるように \AtBeginDvi{} で
+#      囲んで使うのが無難かと．
+# 3. 開発は，実際には TeX Live svn ベースでやっています．これは e-pTeX 110102 用に
+#    調整したものです．概ね以下のようにすればコンパイルできるでしょう：
+#    （環境変数で書かれているところは適宜読み替えてください）
+#    $ scripts/unpack.sh -p -e -r && scripts/build.sh -p -e -r
+#    $ pushd $TMPDIR/texlive-20100720-source/Work/texk/web2c
+#    $ patch -p0 < $DIR/eptex-110206-pdfsavepos-draft-tl10.patch
+#    $ make eptex && cp eptex ../../../inst/bin/$ARCH/
+#    $ popd
+#    $ scripts/texmf.sh -p -e -r 
+#    ...以下略
+#    要は，all.sh の実行と同じことを手動でやって，その途中にパッチ当て & make をする
+#    だけです．
+#
+--- eptex.web.orig	2011-02-07 08:39:50.364000871 +0900
++++ eptex.web	2011-02-07 08:41:54.124000362 +0900
+@@ -282,7 +282,7 @@
+ @d eTeX_revision==".2" { \.{\\eTeXrevision} }
+ @d eTeX_version_string=='-2.2' {current \eTeX\ version}
+ @#
+-@d epTeX_version=='-110102'
++@d epTeX_version=='-110206x4'
+ @d eTeX_banner=='This is e-pTeX, Version 3.1415926-p3.1.11',epTeX_version
+ @d eTeX_banner_k=='This is e-pTeXk, Version 3.1415926-p3.1.11',epTeX_version
+   {printed when \epTeX\ starts}
+@@ -5852,7 +5852,9 @@
+ @d emergency_stretch_code=20 {reduces badnesses on final pass of line-breaking}
+ @d t_baseline_shift_code=21 {shift amount when mixing TATE-kumi and Alphabet}
+ @d y_baseline_shift_code=22 {shift amount when mixing YOKO-kumi and Alphabet}
+-@d dimen_pars=23 {total number of dimension parameters}
++@d pdf_page_width_code=23  {page width}
++@d pdf_page_height_code=24 {page height}
++@d dimen_pars=25 {total number of dimension parameters}
+ @d scaled_base=dimen_base+dimen_pars
+   {table of 256 user-defined \.{\\dimen} registers}
+ @d kinsoku_penalty_base=scaled_base+256 {table of 256 kinsoku registers}
+@@ -5884,6 +5886,8 @@
+ @d t_baseline_shift==dimen_par(t_baseline_shift_code)
+ @d y_baseline_shift==dimen_par(y_baseline_shift_code)
+ @d emergency_stretch==dimen_par(emergency_stretch_code)
++@d pdf_page_width==dimen_par(pdf_page_width_code)
++@d pdf_page_height==dimen_par(pdf_page_height_code)
+ 
+ @p procedure print_length_param(@!n:integer);
+ begin case n of
+@@ -5910,6 +5914,8 @@
+ t_baseline_shift_code:print_esc("tbaselineshift");
+ y_baseline_shift_code:print_esc("ybaselineshift");
+ emergency_stretch_code:print_esc("emergencystretch");
++pdf_page_width_code:    print_esc("pdfpagewidth");
++pdf_page_height_code:   print_esc("pdfpageheight");
+ othercases print("[unknown dimen parameter!]")
+ endcases;
+ end;
+@@ -5963,6 +5969,10 @@
+ @!@:y_baseline_shift_}{\.{\\ybaselineshift} primitive@>
+ primitive("emergencystretch",assign_dimen,dimen_base+emergency_stretch_code);@/
+ @!@:emergency_stretch_}{\.{\\emergencystretch} primitive@>
++primitive("pdfpagewidth",assign_dimen,dimen_base+pdf_page_width_code);@/
++@!@:pdf_page_width_}{\.{\\pdfpagewidth} primitive@>
++primitive("pdfpageheight",assign_dimen,dimen_base+pdf_page_height_code);@/
++@!@:pdf_page_height_}{\.{\\pdfpageheight} primitive@>
+ 
+ @ @<Cases of |print_cmd_chr|...@>=
+ assign_dimen: if chr_code<scaled_base then
+@@ -9319,8 +9329,10 @@
+ @d last_node_type_code=glue_val+1 {code for \.{\\lastnodetype}}
+ @d input_line_no_code=glue_val+2 {code for \.{\\inputlineno}}
+ @d badness_code=input_line_no_code+1 {code for \.{\\badness}}
++@d pdf_last_x_pos_code=badness_code+1 {code for \.{\\pdflastxpos}}
++@d pdf_last_y_pos_code=pdf_last_x_pos_code+1 {code for \.{\\pdflastypos}}
+ @#
+-@d eTeX_int=badness_code+1 {first of \eTeX\ codes for integers}
++@d eTeX_int=pdf_last_y_pos_code+1 {first of \eTeX\ codes for integers}
+ @d eTeX_dim=eTeX_int+8 {first of \eTeX\ codes for dimensions}
+ @d eTeX_glue=eTeX_dim+9 {first of \eTeX\ codes for glue}
+ @d eTeX_mu=eTeX_glue+1 {first of \eTeX\ codes for muglue}
+@@ -10286,7 +10298,7 @@
+ @d etex_convert_base=10 {base for \eTeX's command codes}
+ @d eTeX_revision_code=etex_convert_base {command code for \.{\\eTeXrevision}}
+ @d pdf_strcmp_code=etex_convert_base+1 {command code for \.{\\pdfstrcmp}}
+-@d etex_convert_codes=etex_convert_base+2 {end of \eTeX's command codes}
++@d etex_convert_codes=etex_convert_base+3 {end of \eTeX's command codes}
+ @d job_name_code=etex_convert_codes {command code for \.{\\jobname}}
+ 
+ @<Put each...@>=
+@@ -13869,6 +13881,7 @@
+ @!cur_s:integer; {current depth of output box nesting, initially $-1$}
+ 
+ @ @<Initialize variables as |ship_out| begins@>=
++@<Calculate DVI page dimensions and margins@>;
+ dvi_h:=0; dvi_v:=0; cur_h:=h_offset; dvi_f:=null_font;
+ dvi_dir:=dir_yoko; cur_dir_hv:=dvi_dir;
+ ensure_dvi_open;
+@@ -14377,6 +14390,7 @@
+ @!j,@!k:0..9; {indices to first ten count registers}
+ @!s:pool_pointer; {index into |str_pool|}
+ @!old_setting:0..max_selector; {saved |selector| setting}
++@!t: scaled;
+ begin if tracing_output>0 then
+   begin print_nl(""); print_ln;
+   print("Completed box being shipped out");
+@@ -27864,6 +27878,8 @@
+ 
+ @d immediate_code=4 {command modifier for \.{\\immediate}}
+ @d set_language_code=5 {command modifier for \.{\\setlanguage}}
++@d TeX_extension_end=5 
++@d pdf_save_pos_node=TeX_extension_end+1
+ 
+ @<Put each...@>=
+ primitive("openout",extension,open_node);@/
+@@ -27879,6 +27895,8 @@
+ @!@:immediate_}{\.{\\immediate} primitive@>
+ primitive("setlanguage",extension,set_language_code);@/
+ @!@:set_language_}{\.{\\setlanguage} primitive@>
++primitive("pdfsavepos",extension,pdf_save_pos_node);@/
++@!@:pdf_save_pos_}{\.{\\pdfsavepos} primitive@>
+ 
+ @ The variable |write_loc| just introduced is used to provide an
+ appropriate error message in case of ``runaway'' write texts.
+@@ -27894,6 +27912,7 @@
+   special_node:print_esc("special");
+   immediate_code:print_esc("immediate");
+   set_language_code:print_esc("setlanguage");
++  pdf_save_pos_node: print_esc("pdfsavepos");
+   othercases print("[unknown extension!]")
+   endcases;
+ 
+@@ -27915,6 +27934,7 @@
+ special_node:@<Implement \.{\\special}@>;
+ immediate_code:@<Implement \.{\\immediate}@>;
+ set_language_code:@<Implement \.{\\setlanguage}@>;
++pdf_save_pos_node: @<Implement \.{\\pdfsavepos}@>;
+ othercases confusion("ext1")
+ @:this can't happen ext1}{\quad ext1@>
+ endcases;
+@@ -28003,6 +28023,8 @@
+   print_int(what_lhm(p)); print_char(",");
+   print_int(what_rhm(p)); print_char(")");
+   end;
++pdf_save_pos_node: print_esc("pdfsavepos");
++
+ othercases print("whatsit?")
+ endcases
+ 
+@@ -28016,6 +28038,8 @@
+ close_node,language_node: begin r:=get_node(small_node_size);
+   words:=small_node_size;
+   end;
++pdf_save_pos_node:
++    r := get_node(small_node_size);
+ othercases confusion("ext2")
+ @:this can't happen ext2}{\quad ext2@>
+ endcases
+@@ -28027,6 +28051,8 @@
+   free_node(p,write_node_size); goto done;
+   end;
+ close_node,language_node: free_node(p,small_node_size);
++pdf_save_pos_node:
++    free_node(p, small_node_size);
+ othercases confusion("ext3")
+ @:this can't happen ext3}{\quad ext3@>
+ endcases;@/
+@@ -28068,8 +28094,12 @@
+ 
+ @<Declare procedures needed in |hlist_out|, |vlist_out|@>=
+ procedure special_out(@!p:pointer);
++label done;
+ var old_setting:0..max_selector; {holds print |selector|}
+ @!k:pool_pointer; {index into |str_pool|}
++@!s,@!t,@!cw: scaled;
++@!bl: boolean;
++@!i: small_number;
+ begin synch_h; synch_v;@/
+ old_setting:=selector; selector:=new_string;
+ show_token_list(link(write_tokens(p)),null,pool_size-pool_ptr);
+@@ -28081,7 +28111,8 @@
+ else  begin dvi_out(xxx4); dvi_four(cur_length);
+   end;
+  for k:=str_start[str_ptr] to pool_ptr-1 do dvi_out(so(str_pool[k]));
+-pool_ptr:=str_start[str_ptr]; {erase the string}
++@<Determine whether this \.{\\special} is a papersize special@>;
++done: pool_ptr:=str_start[str_ptr]; {erase the string}
+ end;
+ 
+ @ To write a token list, we must run it through \TeX's scanner, expanding
+@@ -28206,6 +28237,8 @@
+   for \.{\\write}@>;
+ special_node:special_out(p);
+ language_node:do_nothing;
++pdf_save_pos_node:
++  @<Save current position in DVI mode@>;
+ othercases confusion("ext4")
+ @:this can't happen ext4}{\quad ext4@>
+ endcases;
+@@ -28349,13 +28382,21 @@
+ @!@:eTeX_revision_}{\.{\\eTeXrevision} primitive@>
+ primitive("pdfstrcmp",convert,pdf_strcmp_code);@/
+ @!@:pdf_strcmp_}{\.{\\pdfstrcmp} primitive@>
++primitive("pdflastxpos",last_item,pdf_last_x_pos_code);@/
++@!@:pdf_last_x_pos_}{\.{\\pdflastxpos} primitive@>
++primitive("pdflastypos",last_item,pdf_last_y_pos_code);@/
++@!@:pdf_last_y_pos_}{\.{\\pdflastypos} primitive@>
+ 
+ @ @<Cases of |last_item| for |print_cmd_chr|@>=
+ last_node_type_code: print_esc("lastnodetype");
+ eTeX_version_code: print_esc("eTeXversion");
++pdf_last_x_pos_code:  print_esc("pdflastxpos");
++pdf_last_y_pos_code:  print_esc("pdflastypos");
+ 
+ @ @<Cases for fetching an integer value@>=
+ eTeX_version_code: cur_val:=eTeX_version;
++pdf_last_x_pos_code: cur_val := pdf_last_x_pos;
++pdf_last_y_pos_code: cur_val := pdf_last_y_pos;
+ 
+ @ @d eTeX_ex==(eTeX_mode=1) {is this extended mode?}
+ 
+@@ -32989,6 +33031,100 @@
+     cur_val_level := int_val;
+ end;
+ 
++@ Next, we implement \.{\\pdfsavepos} and its related primitives.
++
++@<Glob...@>=
++@!cur_page_width: scaled; {width of page being shipped}
++@!cur_page_height: scaled; {height of page being shipped}
++@!pdf_last_x_pos: integer;
++@!pdf_last_y_pos: integer;
++
++@ @<Implement \.{\\pdfsavepos}@>=
++begin
++    new_whatsit(pdf_save_pos_node, small_node_size);
++end
++
++@ @<Save current position in DVI mode@>=
++begin
++  case dvi_dir of
++  dir_yoko: begin pdf_last_x_pos := cur_h;  pdf_last_y_pos := cur_v;  end;
++  dir_tate: begin pdf_last_x_pos := -cur_v; pdf_last_y_pos := cur_h;  end;
++  dir_dtou: begin pdf_last_x_pos := cur_v;  pdf_last_y_pos := -cur_h; end;
++  endcases;
++  pdf_last_x_pos := pdf_last_x_pos + 4736286;
++  pdf_last_y_pos := cur_page_height - pdf_last_y_pos - 4736286;
++  {4736286 = 1in, the funny DVI origin offset}
++end
++
++@ @<Calculate DVI page dimensions and margins@>=
++  if pdf_page_height <> 0 then
++    cur_page_height := pdf_page_height
++  else
++    cur_page_height := height(p) + depth(p) + 2*v_offset + 2*4736286;
++  if pdf_page_width <> 0 then
++    cur_page_width := pdf_page_width
++  else
++    cur_page_width := width(p) + 2*h_offset + 2*4736286;
++  print_int(dvi_dir);
++  if (box_dir(p)=dir_tate)or(box_dir(p)=dir_dtou) then begin 
++    t:=cur_page_height; cur_page_height:=cur_page_width;
++    cur_page_width:=t; end;
++
++@ Of course \epTeX\ can produce a \.{DVI} file only, not a PDF file. 
++A \.{DVI} file does not have the information of the page height,
++which is needed to implement \.{\\pdflastypos} correctly.
++To keep the information of the page height, I (H.~Kitagawa) 
++adopted \.{\\pdfpageheight} primitive from pdf\TeX. However, in \pTeX (and \epTeX), 
++the papersize special \.{\\special\{papersize=|width|,|height|\}} is commonly used 
++for specifying page width/height. Hence, I decided that the papersize special also 
++changes the value of \.{\\pdfpagewidth} and \.{\\pdfpageheight}. 
++The following routine does this.
++
++In present implementation, the ``valid'' papersize special, which can be interpreted by
++this routine, is in the following form:
++$$\hbox{.{\\special\{papersize=$x$pt,$y$pt\}}}$$
++where $x$\,pt and $y$\, pt are positive dimensions which \TeX\ can comprehend.
++No spaces are allowed in the above form, and only ``pt'' is allowed for unit, for simplicity.
++
++@d ifps==if k=pool_ptr then goto done else if
++@d sop(#)==so(str_pool[(#)])
++
++@<Determine whether this \.{\\special} is a papersize special@>=
++if pool_ptr-str_start[str_ptr]<=10 then goto done;
++k:=str_start[str_ptr];
++if (sop(k+0)<>'p')or(sop(k+1)<>'a')or(sop(k+2)<>'p')or 
++   (sop(k+3)<>'e')or(sop(k+4)<>'r')or(sop(k+5)<>'s')or 
++   (sop(k+6)<>'i')or(sop(k+7)<>'z')or(sop(k+8)<>'e') then goto done;
++k:=k+9; ifps sop(k)='=' then incr(k);
++@<Read dimensions in the argument in the papersize special@>;
++incr(k); ifps sop(k)<>',' then goto done else incr(k); cw:=t;
++@<Read dimensions in the argument in the papersize special@>;
++geq_word_define(dimen_base+pdf_page_width_code,cw);
++geq_word_define(dimen_base+pdf_page_height_code,t);
++cur_page_height := t; cur_page_width := cw;
++if (dvi_dir=dir_tate)or(dvi_dir=dir_dtou) then begin 
++    t:=cur_page_height; cur_page_height:=cur_page_width;
++    cur_page_width:=t; end;
++
++@ @<Read dimensions in the argument in the papersize special@>=
++s:=1; t:=0; bl:=true;
++while (k<pool_ptr)and(bl)  do begin 
++  if (sop(k)>='0')and (sop(k)<='9') then begin t:=10*t+sop(k)-'0'; incr(k); end
++  else begin bl:=false; end;
++end; 
++t:=t*unity; 
++ifps sop(k)='.' then begin incr(k); bl:=true; i:=0;
++  while (k<pool_ptr)and(bl)and(i<=17)  do begin
++    if (sop(k)>='0')and (sop(k)<='9') then begin 
++      dig[i]:=sop(k)-'0'; incr(k); incr(i); end
++    else begin bl:=false; incr(k); incr(i); end;
++  end;
++  t:=s*(t+round_decimals(i-1));
++end 
++else if (sop(k)>='0')and(sop(k)<='9') then goto done
++else begin t:=s*t; incr(k); end;
++ifps sop(k-1)<>'p' then goto done; ifps sop(k)<>'t' then goto done;
++
+ @* \[54] System-dependent changes.
+ This section should be replaced, if necessary, by any special
+ modifications of the program
