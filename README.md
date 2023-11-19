@@ -1,6 +1,6 @@
-# e-pTeX についての wiki 
+# e-pTeX について
 
-このページは，「e-pTeX Wiki」(https://osdn.net/projects/eptex/wiki/FrontPage) を，osdn.net への接続が不安定であるために手動で移行したものである．osdn.net の前は ~~http://www.ms.u-tokyo.ac.jp/~kitagawa/~~ （リンク切れ） で公開していた．
+このページは，「e-pTeX Wiki」(https://osdn.net/projects/eptex/wiki/FrontPage) を，osdn.net への接続が不安定であるために手動で移行したものである（もう Wiki ではない）．osdn.net の前は ~~http://www.ms.u-tokyo.ac.jp/~kitagawa/~~ （リンク切れ） で公開していた．
 
 ## 概要
 
