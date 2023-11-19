@@ -84,7 +84,7 @@ cat $WEBDIR/configure | sed "s/fiif/fi\nif/;s/esac#/esac\n#/" > $WEBDIR/configur
     -- h7k (2009-09-23 18:34:40 JST)
   * [qa:53556](http://oku.edu.mie-u.ac.jp/%7Eokumura/texfaq/qa/53556.html)に伴う修正を ptl08-compile-090818.tar.lzma に加えてみました．tl07-\*, tl08-\* については，明日にでも．  
     -- h7k (2009-08-18 22:45 JST)
-    * [qa:53287](http://oku.edu.mie-u.ac.jp/%7Eokumura/texfaq/qa/53287.html), [qa:53556](http://oku.edu.mie-u.ac.jp/%7Eokumura/texfaq/qa/53556.html)関連のパッチを[tl07-compile-090819.tar.bz2](tl07-compile-090819.tar.bz2)に追加しました．  
+    * [qa:53287](http://oku.edu.mie-u.ac.jp/%7Eokumura/texfaq/qa/53287.html), [qa:53556](http://oku.edu.mie-u.ac.jp/%7Eokumura/texfaq/qa/53556.html) 関連のパッチを tl07-compile-090819.tar.bz2（リンク切れ）に追加しました．  
       -- h7k  (2009-08-19 12:44 JST)
     * （ptexlive ベースでない）TeX Live 2008 の環境では，uptex-0.27-qa53556-tl08c.patch（リンク切れ）をダウンロードして，bld1.sh 実行前に tl08-compile/patches/ に配置してください．TeX Live 2009 が出たら，それ対応の ptexlive ベースに開発を移そうかなと思っています．  
       -- h7k (2009-08-19 19:01 JST)
@@ -92,7 +92,7 @@ cat $WEBDIR/configure | sed "s/fiif/fi\nif/;s/esac#/esac\n#/" > $WEBDIR/configur
   -- h7k  (2009-08-03 23:25:30 JST)
   * ptexlive や W32TeX では正式に「rをrrで置き換える」パッチが入ったようなので，こちらでもそうしました．  
     -- h7k (2009-06-30 10:03 JST)
-  * TeX Live 2008 用のコンパイルスクリプトの試験版を tl08-compile-090629.tar.lzma においてみました．
+  * TeX Live 2008 用のコンパイルスクリプトの試験版を [tl08-compile-090629.tar.lzma](../old_versions/tl08-compile-090629.tar.lzma) においてみました．
     * [qa:53287](http://oku.edu.mie-u.ac.jp/%7Eokumura/texfaq/qa/53287.html) 関連では，「rをrrで置き換える」パッチをこっそり入れました．標準では無効のはずです．**使用には注意を！**
     * その他にも，アーカイブを「行儀の悪くない」ものにしたり，TeX Live 2008 対応の ptexlive（のアーカイブ）を用いることにしたり，unlzma を必須にするなどの変更を加えています．
   いつかは ptexlive ベースに書き換えないとな，と思っているのですが，なかなか時間がとれません（夏休み以降になりそうです）  
@@ -120,7 +120,7 @@ cat $WEBDIR/configure | sed "s/fiif/fi\nif/;s/esac#/esac\n#/" > $WEBDIR/configur
   * Windows でも[[BR]]-- kakuto (2009-01-10 14:44:01 JST)
   * Windows でも -Zp1 (構造体を 1 バイト境界にパックする) とすれは サイズ 12 の場合が出て、失敗します。デフォルトでは 成功するので、おそらく -Zp8  or -Zp16 のようになっているのｄしょう。[[BR]]-- kakuto (2009-01-10 14:50:03 JST)
   * ttk 様，角藤様，ご報告ありがとうございます．どうやらこちらでも "case 12" を加えれば動いてるような感じです．upTeX, e-upTeX を（TeX Live 08 下で）コンパイル出来次第，本格的に検証してみます．[[id:h7k h7k]([BR]]--) (2009-01-10 20:50:49 JST)
-  * 久々の更新です．本当はΩのように数式フォントを256個まで使えるようにもしたかったのですが，動作不良のため，今回は見送りました．（途中経過を [に置いておきます）[[BR]([LinkAttach(fam256.ch,fam256.ch)]])]-- [h7k](id:h7k) (2009-02-18 15:47:24 JST)
+  * 久々の更新です．本当はΩのように数式フォントを256個まで使えるようにもしたかったのですが，動作不良のため，今回は見送りました．（途中経過を fam256.ch（リンク切れ）に置いておきます）[[BR]]-- [h7k](id:h7k) (2009-02-18 15:47:24 JST)
   * eptex のバージョンが表示されるようになったようですが 2010 年も間近（？）になってますしこれからは 90218 より 090218 のようなバージョンにしておくのはどうでしょうか。[[BR]]-- デビ丸 (2009-02-20 10:47:19 JST)
     * ありがとうございます．2010 年になってから考えようとも思っていたのですが，今回のリリース（090220）よりバージョン番号を 6 桁にしています．[[id:h7k h7k]([BR]]--) (2009-02-20 14:33 JST)
   * FAM256パッチ版をW32TeXのもので確認しました．和文数式famを含めてうまく動いている[[BR]]-- 山本和義 (2009-02-22 15:44:05 JST)
