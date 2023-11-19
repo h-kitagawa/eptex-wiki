@@ -1,12 +1,12 @@
 # e-pTeX について
 
-このページは，「e-pTeX Wiki」(https://osdn.net/projects/eptex/wiki/FrontPage) を，osdn.net への接続が不安定であるために手動で移行したものである（もう Wiki ではない）．osdn.net の前は ~~http://www.ms.u-tokyo.ac.jp/~kitagawa/~~ （リンク切れ） で公開していた．
+このページは，「e-pTeX Wiki」(https://osdn.net/projects/eptex/wiki/FrontPage) を，osdn.net への接続が不安定であるために手動で移行したものである（もう Wiki ではない）．osdn.net の前は ~~http\://www.ms.u-tokyo.ac.jp/~kitagawa/~~ （リンク切れ） で公開していた．
 
 ## 概要
 
 現在の pTeX は，TeX の持っていたレジスタ 256 個という制限を未だに引きずっている．その一方，欧文の世界では，TeX Live ですでに e-TeX 機能が取り込まれた pdfTeX が標準となり，32768 個のレジスタを利用できるようになっている．
 
-この状況を受け，僕は東京大学理学部数学科 3 年対象の授業「計算数学II」( ~~http://ks.ms.u-tokyo.ac.jp/~~ （リンク切れ）) 内の project として pTeX に e-TeX 機能を取り込むということを行った．skip レジスタを使用した 10 進 21 桁の浮動小数点演算も暇だったので新たに書き起こした（**注：浮動小数点演算の機能はしばらく前から取り外されています**）．これが本プロジェクトの e-pTeX である．
+この状況を受け，僕は東京大学理学部数学科 3 年対象の授業「計算数学II」( ~~http\://ks.ms.u-tokyo.ac.jp/~~ （リンク切れ）) 内の project として pTeX に e-TeX 機能を取り込むということを行った．skip レジスタを使用した 10 進 21 桁の浮動小数点演算も暇だったので新たに書き起こした（**注：浮動小数点演算の機能はしばらく前から取り外されています**）．これが本プロジェクトの e-pTeX である．
 
 なお，2007/12/30 に角藤さんから同様の peTeX が発表された（[qa:50527](http://oku.edu.mie-u.ac.jp/%7Eokumura/texfaq/qa/50527.html) 以降）が，本プログラムはそれとは独立に実装したものである（残念ながら peTeX は廃棄されたようである（[qa:50551](http://oku.edu.mie-u.ac.jp/%7Eokumura/texfaq/qa/50551.html)））．
 
@@ -53,6 +53,6 @@
  * 「TeX Live 2016 の pTeX 系列のプリミティブ」（[TeXユーザの集い2016](https://texconf16.tumblr.com/)，北川）
    * スライドの [PDF](https://github.com/h-kitagawa/presentations/blob/main/tc16ptex.pdf?raw=1)
  * [resume.pdf](resume.pdf?raw=1)：2008/1/31 までの「計算数学II」での作業記録であり，
-   eptex-100131.tar.bz2 中にも入っている．内輪ネタも入っているが，その一方で，実装方法とかの若干詳しい情報も書いてある．
+   [eptex-100131.tar.bz2](old_versions/eptex-100131.tar.bz2?raw=1) 中にも入っている．内輪ネタも入っているが，その一方で，実装方法とかの若干詳しい情報も書いてある．
    [texjporg/ptex-manual](https://github.com/texjporg/ptex-manual) では eptex_resume.pdf という名前になっている．
  
