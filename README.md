@@ -27,7 +27,7 @@
  *  [過去コメント](old_comments/README.md)：2018-04-01 以前の過去コメント（**移行中**）
  *  [旧版](old_versions/README.md)：過去のバージョンに関する情報
     *  [TeX Live 2008でのコンパイル](tl2008/README.md)
-    *  [TeX Live 2011 への追加日本語パッチについて](tl2011/README.md)
+    *  [TeX Live 2011 への追加日本語パッチについて](tl2011/README.md)（**移行中**）
     *  [`ptex-qtrip` について](ptex-qtrip/README.md)：テストソース`ptex-qtrip` についての説明
  *  [WEB 言語のサンプル](websample/README.md)
  
