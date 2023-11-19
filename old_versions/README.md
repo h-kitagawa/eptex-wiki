@@ -39,7 +39,7 @@
      * [ptex-qtrip（**未変換**）](../ptex-qtrip/README.md)に同梱した pTeX の「bugfix」達も，ptex-qtrip をダウンロードすれば自動で当てます．
    * autoreconf を実行するので，GNU autoconf (>=2.63?), GNU automake (>=1.11?) が必要です．
      m4 のバージョンにも依存するかも（こちらの環境では GNU m4-1.4.14 です）．
-   * 0eptex.sh, 6babel.sh に対するパッチ（次版に取り込み予定）：[eptex-100420-patch1.diff](eptex-100420-patch1.diff?raw=1) (2010/05/30)  
+   * 0eptex.sh, 6babel.sh に対するパッチ（次版に取り込み予定）：[eptex-100420-patch1.diff](../eptex-100420-patch1.diff?raw=1) (2010/05/30)  
      eptex-100420.tar.bz2 の展開後に当ててください．非 Linux 環境への対応強化や，eptexdefs.lib のコピーし忘れ，6babel.sh での sed の置換ミス（Z.R.さん，ありがとうございます）への修正が行われます．
  * [eptex-100201.tar.bz2](eptex-100201.tar.bz2?raw=1)：
    * 前バージョン（100131）からの更新部分：  

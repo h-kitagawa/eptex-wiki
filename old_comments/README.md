@@ -86,7 +86,8 @@ cat $WEBDIR/configure | sed "s/fiif/fi\nif/;s/esac#/esac\n#/" > $WEBDIR/configur
     -- h7k (2009-08-18 22:45 JST)
     * [qa:53287](http://oku.edu.mie-u.ac.jp/%7Eokumura/texfaq/qa/53287.html), [qa:53556](http://oku.edu.mie-u.ac.jp/%7Eokumura/texfaq/qa/53556.html) 関連のパッチを tl07-compile-090819.tar.bz2（リンク切れ）に追加しました．  
       -- h7k  (2009-08-19 12:44 JST)
-    * （ptexlive ベースでない）TeX Live 2008 の環境では，uptex-0.27-qa53556-tl08c.patch（リンク切れ）をダウンロードして，bld1.sh 実行前に tl08-compile/patches/ に配置してください．TeX Live 2009 が出たら，それ対応の ptexlive ベースに開発を移そうかなと思っています．  
+    * （ptexlive ベースでない）TeX Live 2008 の環境では，[uptex-0.27-qa53556-tl08c.patch](../uptex-0.27-qa53556-tl08c.patch?raw=1) をダウンロードして，bld1.sh
+実行前に tl08-compile/patches/ に配置してください．TeX Live 2009 が出たら，それ対応の ptexlive ベースに開発を移そうかなと思っています．  
       -- h7k (2009-08-19 19:01 JST)
   * W32TeXのサイトが移転したそうなのでリンク（一ヶ所）を修正．  
   -- h7k  (2009-08-03 23:25:30 JST)

@@ -1,0 +1,19 @@
+diff -udr pxdvik.orig/special.c pxdvik/special.c
+--- pxdvik.orig/special.c	2012-03-30 21:20:11.771979223 +0900
++++ pxdvik/special.c	2012-03-30 21:48:37.247926202 +0900
+@@ -1026,6 +1026,7 @@
+ 
+     p = strstr(PostScript_cmd, "scale");
+     if (p != NULL) {
++      if (strstr(p, "scalefont") == NULL ) {
+ 	if (strncmp(p - 4, "div", 3) == 0) {
+ 	    while (*p != '\0' && !isdigit(*p)) --p;
+ 	    while (*p != '\0' && isdigit(*p)) --p;
+@@ -1102,6 +1103,7 @@
+ 		    bbox_xscale, bbox_yscale, PostScript_cmd);
+ 	sscanf(p, "%d neg rotate", &bbox_angle);
+ 	return True;
++      }
+     }
+     if (strstr(PostScript_cmd, " scale ") != NULL)
+ 	return True;
