@@ -87,12 +87,12 @@
      * [TeX Live 2008](http://www.tug.org/texlive/)：[tl08-compile-090707.tar.lzma](tl08-compile-090707.tar.lzma?raw=1) を用いる．詳細は [TeX Live 2008でのコンパイル（**未変換**）](../tl08/README.md) を参照．upTeX のコンパイルも同時に行います．（option 中で指定した $CMP_TEMP は bld1.sh 実行前に予め作っておいてください）
      * [ptexlive](http://tutimura.ath.cx/ptexlive/)
        * **ptexlive-20080715**：[tl07-compile-090819.tar.bz2](tl07-compile-090819.tar.bz2?raw=1) を用いる．詳細はこのファイル内の compile.txt を参照．upTeX も（任意に）同時コンパイルすることができます．
-       * **ptexlive-20090807（以前，以後もOK？）**：[ptl08-compile-090818.tar.lzma（**どこ**）](ptl08-compile-090818.tar.lzma?raw=1)　を用いる．upTeX のコンパイルも同時に行います．コンパイル方法はこのファイル内の compile.txt　を参照．**試験版です（あんまり動作確認してません）**．
+       * **ptexlive-20090807（以前，以後もOK？）**：[ptl08-compile-090818.tar.lzma](ptl08-compile-090818.tar.lzma?raw=1)　を用いる．upTeX のコンパイルも同時に行います．コンパイル方法はこのファイル内の compile.txt　を参照．**試験版です（あんまり動作確認してません）**．
      * [ptetex3](http://tutimura.ath.cx/ptetex/) またはその上の upTeX-0.26：e-pTeX のアーカイブ内の INSTALL.txt を参照してください．これだけインストールが手動です．upTeX-0.27 の側でも e-pTeX の自動インストールが可能になっているので，そちらを使ってもいいでしょう．
 
  * [eptex-090223.tar.bz2](/eptex-090223.tar.bz2?raw=1)
    * 090220 からの変更点：コンパイルスクリプトまわりを改変．upTeX-0.26 で確認しているが，それ以降でもそのまま通る可能性あり．
-    * [TeX Live 2008](http://www.tug.org/texlive/) でのコンパイルには，[tl07-compile-090303.tar.bz2（**どこ**）](tl08-compile-090303.tar.bz2?raw=1)を用いてください．
+    * [TeX Live 2008](http://www.tug.org/texlive/) でのコンパイルには，[tl08-compile-090303.tar.bz2](tl08-compile-090303.tar.bz2?raw=1)を用いてください．
  * [eptex-090220.tar.bz2](eptex-090220.tar.bz2?raw=1)
    * 前バージョン（90218）からの更新部分：
      * バージョン番号を 6 桁に．（デビ丸さん，ありがとうございます）
