@@ -19,11 +19,18 @@
 
 なお，最近は，[LuaTeX-ja]([http://sourceforge.jp/projects/luatex-ja/wiki/FrontPage) プロジェクトの方を中心に取り組んでいます．
 
- * TeX Live 2021→2022 に伴う pTeX, e-pTeX の変更点については [こちら](tl2022/README.md) を参照して下さい．
- * TeX Live 2019→2020 に伴う pTeX, e-pTeX の変更点については [こちら](tl2020/README.md) を参照して下さい．
- * TeX Live 2017→2018 に伴う pTeX, e-pTeX の変更点については [こちら](tl2018/README.md) を参照して下さい．
- * e-pTeX 141109 以降に導入された`\lastnodechar` プリミティブについては，[`\lastnodechar` プリミティブについて](lastnodechar/README.md) を参照して下さい．
-
+## 他ページへのリンク
+ * [TeX Live 2021→2022 に伴う pTeX, e-pTeX の変更点](tl2022/README.md)
+ * [TeX Live 2019→2020 に伴う pTeX, e-pTeX の変更点](tl2020/README.md)
+ * [TeX Live 2017→2018 に伴う pTeX, e-pTeX の変更点](tl2018/README.md)
+ *  [`\lastnodechar` プリミティブについて](lastnodechar/README.md)：e-pTeX 141109 以降に導入された`\lastnodechar` プリミティブについて
+ *  [過去コメント](old_comments/README.md)：2018-04-01 以前の過去コメント（**移行中**）
+ *  [旧版](old_versions/README.md)：過去のバージョンに関する情報
+    *  [TeX Live 2008でのコンパイル](tl2008/README.md)
+    *  [TeX Live 2011 への追加日本語パッチについて](tl2011/README.md)
+    *  [`ptex-qtrip` について](ptex-qtrip/README.md)：テストソース`ptex-qtrip` についての説明
+ *  [WEB 言語のサンプル](websample/README.md)
+ 
 <!--
 以下は TL11 以降の情報
  * eplatex というコマンドはなくなり，platex というコマンドで e-pTeX が起動されるようになりました（参考：[http://oku.edu.mie-u.ac.jp/~okumura/texfaq/qa/55944.html qa:55944]）．
@@ -40,21 +47,12 @@
    * このパッチにより，e-pTeX のバージョンは '''130605''' となります．
 -->
 
-## その他の情報
- * 以前の版は，[旧版のページ](old_versions/README.md) からたどれます．
- * 文書類：
-   * 「pTeX 系列の文字列化における和文欧文の区別」（[TeXConf 2019（中止）](https://texconf2019.tumblr.com/)，北川）
-     * 使う予定だったスライドの [PDF](https://github.com/h-kitagawa/presentations/blob/main/tc19ptex.pdf?raw=1)
-   * 「TeX Live 2016 の pTeX 系列のプリミティブ」（[TeXユーザの集い2016](https://texconf16.tumblr.com/)，北川）
-     * スライドの [PDF](https://github.com/h-kitagawa/presentations/blob/main/tc16ptex.pdf?raw=1)
-   * [resume.pdf](resume.pdf?raw=1)：2008/1/31 までの「計算数学II」での作業記録であり，
-     eptex-100131.tar.bz2 中にも入っている．内輪ネタも入っているが，その一方で，実装方法とかの若干詳しい情報も書いてある．[texjporg/ptex-manual](https://github.com/texjporg/ptex-manual) では eptex_resume.pdf という名前になっている．
-   * 以前のページに載せていた WEB のサンプルはこちら：[WEB のサンプル](websample/README.md)
+## 文書類
+ * 「pTeX 系列の文字列化における和文欧文の区別」（[TeXConf 2019（中止）](https://texconf2019.tumblr.com/)，北川）
+   * 使う予定だったスライドの [PDF](https://github.com/h-kitagawa/presentations/blob/main/tc19ptex.pdf?raw=1)
+ * 「TeX Live 2016 の pTeX 系列のプリミティブ」（[TeXユーザの集い2016](https://texconf16.tumblr.com/)，北川）
+   * スライドの [PDF](https://github.com/h-kitagawa/presentations/blob/main/tc16ptex.pdf?raw=1)
+ * [resume.pdf](resume.pdf?raw=1)：2008/1/31 までの「計算数学II」での作業記録であり，
+   eptex-100131.tar.bz2 中にも入っている．内輪ネタも入っているが，その一方で，実装方法とかの若干詳しい情報も書いてある．
+   [texjporg/ptex-manual](https://github.com/texjporg/ptex-manual) では eptex_resume.pdf という名前になっている．
  
-## コメント
-~~長くなってきたので，2018-04-01 以前のコメントは[過去コメント](old_comments/README.md)の前半部に移しました．~~（移行中）
-
-~~コメントは下のボックスに遠慮なくお書きください．
-また，バグ報告・機能リクエストなどは[http://sourceforge.jp/projects/eptex/ticket/ こちら]へどうぞ（コメント欄だと管理しきれなくなる）．~~
-
-
