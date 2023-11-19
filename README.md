@@ -41,7 +41,7 @@
 -->
 
 ## その他の情報
- * ~~以前の版は，[旧版のページ](old_versions/) からたどれます．~~ **整備中**
+ * 以前の版は，[旧版のページ](old_versions/README.md) からたどれます．
  * 文書類：
    * 「pTeX 系列の文字列化における和文欧文の区別」（[TeXConf 2019（中止）](https://texconf2019.tumblr.com/)，北川）
      * 使う予定だったスライドの [PDF](https://github.com/h-kitagawa/presentations/blob/main/tc19ptex.pdf)
@@ -49,13 +49,12 @@
      * スライドの [PDF](https://github.com/h-kitagawa/presentations/blob/main/tc16ptex.pdf)
    * [resume.pdf](resume.pdf)：2008/1/31 までの「計算数学II」での作業記録であり，
      eptex-100131.tar.bz2 中にも入っている．内輪ネタも入っているが，その一方で，実装方法とかの若干詳しい情報も書いてある．[texjporg/ptex-manual](https://github.com/texjporg/ptex-manual) では eptex_resume.pdf という名前になっている．
-   * 以前のページに載せていた WEB のサンプルはこちら：[WEB のサンプル](websample/)
+   * 以前のページに載せていた WEB のサンプルはこちら：[WEB のサンプル](websample/README.md)
  
 ## コメント
-長くなってきたので，2018-04-01 以前のコメントは[過去コメント](old_comments/)の前半部に移しました．
+~~長くなってきたので，2018-04-01 以前のコメントは[過去コメント](old_comments/README.md)の前半部に移しました．~~（移行中）
 
 ~~コメントは下のボックスに遠慮なくお書きください．
 また，バグ報告・機能リクエストなどは[http://sourceforge.jp/projects/eptex/ticket/ こちら]へどうぞ（コメント欄だと管理しきれなくなる）．~~
 
-[[LineComment(direction=below, rows=3)]]
 
