@@ -1,3 +1,5 @@
+# 旧版
+
 このページには以前のバージョンに関する情報を載せてあります．
 
  * [eptex-110315.tar.xz](eptex-110315.tar.xz)
@@ -23,7 +25,7 @@
   2010/12/31 15:38 ごろにファイルを差し替えました（doc/ の欠落と INSTALL.txt 不備のため）．
    * 前バージョン（100420）からの更新部分：
      * インストール方法を変えた．e-pTeX の核心部分は前バージョンから変わっていないはず．
-     * [upTeX](http://homepage3.nifty.com/ttk/comp/tex/uptex.html) との同時コンパイルですが，上の配布ファイル内では見送っています．
+     * [upTeX](http://www.t-lab.opal.ne.jp/tex/uptex.html) との同時コンパイルですが，上の配布ファイル内では見送っています．
        （最初から同時コンパイルを目標に入れて開発していましたが，upTeX のパッチを全部再構成してしまったので^^;）
    * autoreconf を実行するので，GNU autoconf (==2.65), GNU automake (>=1.11?) が必要です．
      m4 のバージョンにも依存するかも（こちらの環境では GNU m4-1.4.15 です）．
@@ -33,7 +35,7 @@
    [ptexlive-20100322](http://tutimura.ath.cx/ptexlive/) に対応した**試験版**．手っ取り早く作ったので，環境によってうまく動かないかもしれません．
    * 前バージョン（100201）からの更新部分：
      * インストール方法を変えた．e-pTeX の核心部分は前バージョンから変わっていないはず．
-     * （こちらも開発環境が ptexlive ベースに移行するであろう）[upTeX](http://homepage3.nifty.com/ttk/comp/tex/uptex.html) とのコンパイルは，upTeX 側の実装方針がまだわからなかったのでとりあえず本版では削除（早々と何とかしたい）．
+     * （こちらも開発環境が ptexlive ベースに移行するであろう）[upTeX](http://www.t-lab.opal.ne.jp/tex/uptex.html) とのコンパイルは，upTeX 側の実装方針がまだわからなかったのでとりあえず本版では削除（早々と何とかしたい）．
      * [ptex-qtrip（**未変換**）](../ptex-qtrip/README.md)に同梱した pTeX の「bugfix」達も，ptex-qtrip をダウンロードすれば自動で当てます．
    * autoreconf を実行するので，GNU autoconf (>=2.63?), GNU automake (>=1.11?) が必要です．
      m4 のバージョンにも依存するかも（こちらの環境では GNU m4-1.4.14 です）．
@@ -42,7 +44,7 @@
  * [eptex-100201.tar.bz2](eptex-100201.tar.bz2)：
    * 前バージョン（100131）からの更新部分：  
      script/install での誤植で，e-upTeX の format が extended modeになっていなかったのを修正．（通りすがりさん，Dora さん，ありがとうございます）
-   * コンパイルは以下の環境を考えています．[upTeX](http://homepage3.nifty.com/ttk/comp/tex/uptex.html) と合わせてコンパイルすることが可能です（upTeX-0.29 でテスト）．
+   * コンパイルは以下の環境を考えています．[upTeX](http://www.t-lab.opal.ne.jp/tex/uptex.htmll) と合わせてコンパイルすることが可能です（upTeX-0.29 でテスト）．
      * [ptexlive-20091009](http://tutimura.ath.cx/ptexlive/)：
        [ptl08-compile-100131.tar.lzma](ptl08-compile-100131.tar.lzma) を用いる．
        このアーカイブ中の compile.txt を参照．upTeX も（任意に）同時コンパイルすることができます．
@@ -51,7 +53,7 @@
  * [eptex-100131.tar.bz2](eptex-100131.tar.bz2)
    * 前バージョン（091003）からの更新部分：
      * upTeX-0.29 に対応したつもり（upTeX-0.29 内にある euptex-091003/ 以下をベースにしています）．
-   * コンパイルは以下の環境を考えています．[upTeX](http://homepage3.nifty.com/ttk/comp/tex/uptex.html) と合わせてコンパイルすることが可能です（upTeX-0.29 でテスト）．
+   * コンパイルは以下の環境を考えています．[upTeX](http://www.t-lab.opal.ne.jp/tex/uptex.html) と合わせてコンパイルすることが可能です（upTeX-0.29 でテスト）．
      * [ptexlive-20091009](http://tutimura.ath.cx/ptexlive/)：
        [ptl08-compile-100131.tar.lzma](ptl08-compile-100131.tar.lzma) を用いる．
        このアーカイブ中の compile.txt を参照．upTeX も（任意に）同時コンパイルすることができます．
@@ -61,7 +63,6 @@
    下の eptex-090927 で見つかった typo を修正したものです（デビ丸さん，ありがとうございます）．
    コンパイル方法とかはまったく変わらないはずです．
    eptex-090927 をコンパイルできていれば本版を無理して入れる必要はありません．
-   （[説明書（**未変換**）](eptexdoc-091003.pdf)は多少更新してあります）
 
  * [eptex-090927.tar.bz2](eptex-090927.tar.bz2)：
    一応，変更点が多いので**ベータ版的扱い**ですが，今後の開発は本版をベースとするつもりなので，テストをお願いします．
@@ -70,7 +71,7 @@
      * 浮動小数点演算は，実装が中途半端だったことから，本版では削除してみた．
        （どうしても使いたい場合は，090309 版の fp.ch がそのまま使えるようです）
      * 「e-TeX ベースとした方が良い」とのアドバイスをもらったので，そのようにしてみた．動作自体は 090309 版と変わらないはず．
-   * 多忙なのとリリースを急いだため，コンパイルは以下の環境しか今は考えていません．[upTeX](http://homepage3.nifty.com/ttk/comp/tex/uptex.html) と合わせてコンパイルすることが可能です．（とりあえず upTeX-0.28 でテスト）
+   * 多忙なのとリリースを急いだため，コンパイルは以下の環境しか今は考えていません．[upTeX](http://www.t-lab.opal.ne.jp/tex/uptex.html) と合わせてコンパイルすることが可能です．（とりあえず upTeX-0.28 でテスト）
      * [ptexlive-20090904](http://tutimura.ath.cx/ptexlive/)：
        [ptl08-compile-100108.tar.lzma](ptl08-compile-100108.tar.lzma) を用いる．
        このアーカイブ中の compile.txt を参照．upTeX も（任意に）同時コンパイルすることができます．
@@ -95,7 +96,7 @@
  * [eptex-090220.tar.bz2](eptex-090220.tar.bz2)
    * 前バージョン（90218）からの更新部分：
      * バージョン番号を 6 桁に．（デビ丸さん，ありがとうございます）
-     * （試験的な機能であり，標準では有効にしてコンパイルされませんが）数式フォントの 16 個制限を緩和．詳しくは [eptexdoc.pdf（**どこ？**）](eptexdoc.pdf)（アーカイブ内にもあります）の§4 をお読みください．
+     * （試験的な機能であり，標準では有効にしてコンパイルされませんが）数式フォントの 16 個制限を緩和．
     * [TeX Live 2008](http://www.tug.org/texlive/) でのコンパイルには，[tl08-compile-090305.tar.bz2](tl08-compile-090305.tar.bz2)を用いてください．
       * このアーカイブ内の option の最後の 2 行には誤植がありますので，次のように直してください（tl-bsd fan さん，ありがとうございます）．
 ```
