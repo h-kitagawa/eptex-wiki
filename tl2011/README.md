@@ -106,26 +106,48 @@ Diff finished.  Sun Nov 27 00:52:15 2011
     -- h7k (2011-10-22 14:24:52 JST)
   * ほんとだ，書き込む時に勘違いしていたようです（手元の script ではちゃんと texmf/...）になってます．  
     -- h7k  (2011-08-19 22:59:57 JST)
-
-** ここまで変換済み **
-  * タイポだと思いますが，h7k (2011-07-26 06:13:40 JST) の記事で updmap-????????-tl11 のコピー先は “texmf-dist/..." ではなく texmf/scripts/tetex/updmap.pl とすべきと思います．これで日本語も問題ないことと思います．[[BR]]-- takahashi (2011-08-19 11:39:45 JST)
-  * OSX Lion上でdvipdfmxがAbortを出しやすくなったことを報告したものです。[4.1.1を使って、[[BR]([BR]]その後調べた結果、このことはLion上でXcode)]texliveをbuildした場合に起こることで、[Live 2011 への追加日本語パッチが原因ではないことがわかりました。[[BR]([BR]]TeX)]お騒がせして申し訳ありません。[--disable-xdv2pdf --disable-xdvipdfmx  --disable-xetex[[BR]([BR]]texlive-20110705-source.tar.xzを[[BR]]./Build)]としてbuildし、できたdvipdfmxで同じようにAbortが発生することを確認しました。[[BR]]-- anonymous (2011-08-05 21:04:39 JST)
-  * 日本語対応のupdmap、私の配布物（MacTeX2011への追加モジュール）にも流用させていただきました。[[BR]]-- H.Ogawa (2011-08-01 22:24:28 JST)
-  * /usr/local/texlive/2011/bin/x86_64-darwin/dvipdfmxをインストールして試しましたが、うまくタイプセットできました。sizeは868156です。[[BR]]-- anonymous (2011-08-01 21:13:23 JST)
-  * sizeが違うのは、universalとintelの違いのせいかもしれません。[[BR]]-- anonymous (2011-08-01 20:23:02 JST)
-  * versionはどちらもdvipdfm-0.13.2cでしたが、サイズがかなり違いました。また、p2011のほうは、なぜか所有者がlocal userになっています。[ll /usr/local/texlive/2011/bin/universal-darwin/dvipdfmx -rwxr-xr-x  1 root  wheel  1563484  6 22 07:11 /usr/local/texlive/2011/bin/universal-darwin/dvipdfmx[[BR]([BR]]%)]% ll /usr/local/texlive/p2011/bin/x86_64-apple-darwin11.0.0/dvipdfmx[ 1 huge  wheel  854272  8  1 19:56 /usr/local/texlive/p2011/bin/x86_64-apple-darwin11.0.0/dvipdfmx[[BR]([BR]]-rwxr-xr-x)]-- anonymous (2011-08-01 20:21:38 JST)
-  * \dtouを外してみましたが、同じようにp2011のdvipdfmxでのみAbortが出てpdfが作れませんでした。Abortが出るのはbeamerのファイルで、写真などを含めて25Mぐらいあるので、検証用にお送りするのが難しいかもしれません。もう少し小さなファイルにしたときに出ないか調べてみます。[[BR]]-- anonymous (2011-08-01 20:11:24 JST)
-  * とりあえず，ほとんど誰の約にも立っていないであろう \dtou パッチを外してみる（scripts/unpack.sh の 25行目の「zpatch ...」の行をコメントアウトする）とどうなるでしょうか？ （dvipdfmx にあてているパッチはこれだけのはず）[[id:h7k h7k]([BR]]あと，再現してくれるソースがあれば，こちらでも検証できるので嬉しいです．[[BR]]--) (2011-08-01 06:00:51 JST)
-  * 2011のdvipdfmxでは大丈夫なのですが、p2011のdvipdfmxでAbortが出る頻度が高くなりました。環境はOSX Lionです。はっきりしない報告ですみません。[[BR]]-- anonymous (2011-07-31 22:32:08 JST)
-  * ありがとうございます。よろしくお願いいたします。[[BR]]-- H.Ogawa (2011-07-27 11:49:08 JST)
-  * 了解しました．数日中に更新します．>角藤さんが作成してくださったdvipsのパッチの取り込み<br># リンクは直しておきました．[[id:h7k h7k]([BR]]--) (2011-07-27 07:09:57 JST)
-  * すいません、リンクが変になってしまいました。[[BR]]-- H.Ogawa (2011-07-27 01:56:22 JST)
-  * [こちらのスレッド](http://oku.edu.mie-u.ac.jp/tex/mod/forum/discuss.php?d=678)の角藤さんが作成してくださったdvipsのパッチの取り込みもご検討いただけないでしょうか？[[BR]]-- H.Ogawa (2011-07-27 01:55:22 JST)
-  * ご提示いただいた修正で、こちらでも正常に動作しました。ありがとうございます。[[BR]]-- H.Ogawa (2011-07-26 19:25:12 JST)
+  * タイポだと思いますが，h7k (2011-07-26 06:13:40 JST) の記事で updmap-????????-tl11 のコピー先は “texmf-dist/..." ではなく texmf/scripts/tetex/updmap.pl とすべきと思います．これで日本語も問題ないことと思います．  
+    -- takahashi (2011-08-19 11:39:45 JST)
+  * OSX Lion上でdvipdfmxがAbortを出しやすくなったことを報告したものです。その後調べた結果、このことはLion上でXcode 4.1.1を使って，texliveをbuildした場合に起こることで、[Live 2011 への追加日本語パッチが原因ではないことがわかりました。
+  お騒がせして申し訳ありません。texlive-20110705-source.tar.xzを`./Build --disable-xdv2pdf --disable-xdvipdfmx  --disable-xetex`としてbuildし、できたdvipdfmxで同じようにAbortが発生することを確認しました。  
+    -- anonymous (2011-08-05 21:04:39 JST)
+  * 日本語対応のupdmap、私の配布物（MacTeX2011への追加モジュール）にも流用させていただきました。  
+    -- H.Ogawa (2011-08-01 22:24:28 JST)
+  * /usr/local/texlive/2011/bin/x86_64-darwin/dvipdfmxをインストールして試しましたが、うまくタイプセットできました。sizeは868156です。  
+    -- anonymous (2011-08-01 21:13:23 JST)
+  * sizeが違うのは、universalとintelの違いのせいかもしれません。  
+    -- anonymous (2011-08-01 20:23:02 JST)
+  * versionはどちらもdvipdfm-0.13.2cでしたが、サイズがかなり違いました。また、p2011のほうは、なぜか所有者がlocal userになっています。
+```
+% ll /usr/local/texlive/2011/bin/universal-darwin/dvipdfmx
+-rwxr-xr-x  1 root  wheel  1563484  6 22 07:11 /usr/local/texlive/2011/bin/universal-darwin/dvipdfmx
+% ll /usr/local/texlive/p2011/bin/x86_64-apple-darwin11.0.0/dvipdfmx
+-rwxr-xr-x  1 huge  wheel  854272  8  1 19:56 /usr/local/texlive/p2011/bin/x86_64-apple-darwin11.0.0/dvipdfmx
+```
+    -- anonymous (2011-08-01 20:21:38 JST)
+  * \dtouを外してみましたが、同じようにp2011のdvipdfmxでのみAbortが出てpdfが作れませんでした。Abortが出るのはbeamerのファイルで、写真などを含めて25Mぐらいあるので、検証用にお送りするのが難しいかもしれません。もう少し小さなファイルにしたときに出ないか調べてみます。  
+    -- anonymous (2011-08-01 20:11:24 JST)
+  * とりあえず，ほとんど誰の約にも立っていないであろう \dtou パッチを外してみる（scripts/unpack.sh の 25行目の「zpatch ...」の行をコメントアウトする）とどうなるでしょうか？ （dvipdfmx にあてているパッチはこれだけのはず）
+  あと，再現してくれるソースがあれば，こちらでも検証できるので嬉しいです．
+    -- h7k (2011-08-01 06:00:51 JST)
+  * 2011のdvipdfmxでは大丈夫なのですが、p2011のdvipdfmxでAbortが出る頻度が高くなりました。環境はOSX Lionです。はっきりしない報告ですみません。  
+    -- anonymous (2011-07-31 22:32:08 JST)
+  * ありがとうございます。よろしくお願いいたします。  
+    -- H.Ogawa (2011-07-27 11:49:08 JST)
+  * 了解しました．数日中に更新します．>角藤さんが作成してくださったdvipsのパッチの取り込み
+    \# リンクは直しておきました．
+    -- h7k  (2011-07-27 07:09:57 JST)
+  * すいません、リンクが変になってしまいました。  
+    -- H.Ogawa (2011-07-27 01:56:22 JST)
+  * [こちらのスレッド](http://oku.edu.mie-u.ac.jp/tex/mod/forum/discuss.php?d=678)の角藤さんが作成してくださったdvipsのパッチの取り込みもご検討いただけないでしょうか？  
+    -- H.Ogawa (2011-07-27 01:55:22 JST)
+  * ご提示いただいた修正で、こちらでも正常に動作しました。ありがとうございます。  
+    -- H.Ogawa (2011-07-26 19:25:12 JST)
   * 報告ありがとうございます．
-> updmapが生成するkanjix.mapの書式が、dvipsのものになってしまう
- たまたま使える Mac を探し出せたのでビルドしてみたら，全く同じ症状にぶち当たりました．
- とりあえず updmap-????????-tl11 の 1031 行目〜 1035 行目ぐらいまでを
+  > updmapが生成するkanjix.mapの書式が、dvipsのものになってしまう
+   
+   たまたま使える Mac を探し出せたのでビルドしてみたら，全く同じ症状にぶち当たりました．
+   とりあえず updmap-????????-tl11 の 1031 行目〜 1035 行目ぐらいまでを
 ```
 push @tmpkanji1, &getLines(@tmpkanji0);
 &writeLines(">$dvipdfmoutputdir/kanjix.map",
@@ -133,8 +155,13 @@ push @tmpkanji1, &getLines(@tmpkanji0);
 @tmpkanji1 = &normalizeLines(@tmpkanji1);
 my @tmpkanji2 = &cidx2dvips(\@tmpkanji1);
 ```
- のように行を入れ替えたりしていろいろいじっていたら，いつの間にか直っていました．よくわからないですが……．[[id:h7k h7k]([BR]]--) (2011-07-26 17:38:19 JST)
-  * updmapが生成するkanjix.mapの書式が、[[BR]]フォント名　CMap　実フォント[[BR]]のdvipdfmxのものではなく[[BR]]フォント名　実フォント-CMap[[BR]]のdvipsのものになってしまうようです。[[BR]]-- H.Ogawa (2011-07-26 16:40:44 JST)
-  * 必要最小限のみをビルドした状況で再インストールしたところ有効になりました．原因は分かりませんが，書き換えに失敗したまま，インストールしてしまったようです．[[BR]]-- htfs (2011-07-26 11:42:51 JST)
-  * 自由にいじれる Mac を持ってないこともあり，よくわからないです．updmap-????????-tl11 が（書き換えた後の）本体なので，texmf-dist/scripts/tetex/updmap.pl としてコピーすればいいように思いますが……．[[id:h7k h7k]([BR]]--) (2011-07-26 06:13:40 JST)
-  * フォント設定を行うと"updmap: Unsupported option kanjiEmbed"となりますので，パッチが有効になっていないと思われます．[[BR]]-- htfs (2011-07-25 23:20:47 JST)
+   のように行を入れ替えたりしていろいろいじっていたら，いつの間にか直っていました．よくわからないですが……．  
+     -- h7k (2011-07-26 17:38:19 JST)
+  * updmapが生成するkanjix.mapの書式が、「フォント名　CMap　実フォント」のdvipdfmxのものではなく「フォント名　実フォント-CMap」のdvipsのものになってしまうようです。  
+    -- H.Ogawa (2011-07-26 16:40:44 JST)
+  * 必要最小限のみをビルドした状況で再インストールしたところ有効になりました．原因は分かりませんが，書き換えに失敗したまま，インストールしてしまったようです．
+    -- htfs (2011-07-26 11:42:51 JST)
+  * 自由にいじれる Mac を持ってないこともあり，よくわからないです．updmap-????????-tl11 が（書き換えた後の）本体なので，texmf-dist/scripts/tetex/updmap.pl としてコピーすればいいように思いますが……．  
+    -- h7k (2011-07-26 06:13:40 JST)
+  * フォント設定を行うと"updmap: Unsupported option kanjiEmbed"となりますので，パッチが有効になっていないと思われます．
+    -- htfs (2011-07-25 23:20:47 JST)
