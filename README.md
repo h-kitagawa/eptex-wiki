@@ -17,7 +17,7 @@
 [TeX Live 2011 以降](http://www.tug.org/texlive/)や，[W32TeX](http://w32tex.org/index-ja.html) では，pTeX をインストールすると，e-pTeX も導入されるようになっています．
 そのため，本ページでは，今後 **（1年に1回リリースされる）TeX Live に対する修正の情報を載せる**という形になります．
 
-なお，最近は，[LuaTeX-ja]([http://sourceforge.jp/projects/luatex-ja/wiki/FrontPage) プロジェクトの方を中心に取り組んでいます．
+なお，最近は，[LuaTeX-ja プロジェクト](http://sourceforge.jp/projects/luatex-ja/wiki/FrontPage)の方を中心に取り組んでいます．
 
 ## 他ページへのリンク
  * [TeX Live 2021→2022 に伴う pTeX, e-pTeX の変更点](tl2022/README.md)
@@ -50,6 +50,7 @@
 ## 文書類
  * 「pTeX 系列の文字列化における和文欧文の区別」（[TeXConf 2019（中止）](https://texconf2019.tumblr.com/)，北川）
    * 使う予定だったスライドの [PDF](https://github.com/h-kitagawa/presentations/blob/main/tc19ptex.pdf?raw=1)
+   * これが元になった TUGBoat の記事 (H. Kitagawa, "[Distinguishing 8-bit characters and Japanese characters in (u)pTeX](https://tug.org/TUGboat/tb41-3/tb129kitagawa-char.pdf)", TUGBoat 41:3, 329--334, 2020)
  * 「TeX Live 2016 の pTeX 系列のプリミティブ」（[TeXユーザの集い2016](https://texconf16.tumblr.com/)，北川）
    * スライドの [PDF](https://github.com/h-kitagawa/presentations/blob/main/tc16ptex.pdf?raw=1)
  * [resume.pdf](resume.pdf?raw=1)：2008/1/31 までの「計算数学II」での作業記録であり，
